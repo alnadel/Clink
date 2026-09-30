@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { compileLevel, type LevelJson } from '../../src';
 import { COMPILE_EXPECTED, deepFreeze, FIXTURE_IDS, levelErrorCode, levelJson } from '../helpers';
 
-describe.skip('compileLevel: fixtures', () => {
+describe('compileLevel: fixtures', () => {
   it.each(FIXTURE_IDS)('%s resolves positions, glasses, targets and ice', (id) => {
     const json = levelJson(id);
     const expected = COMPILE_EXPECTED[id];
@@ -368,7 +368,7 @@ const MUTATIONS: Mutation[] = [
   ],
 ];
 
-describe.skip('compileLevel: validation errors', () => {
+describe('compileLevel: validation errors', () => {
   it.each(MUTATIONS)('%s -> %s', (_name, code, mutate) => {
     const json = levelJson('w1-08');
     mutate(json);
