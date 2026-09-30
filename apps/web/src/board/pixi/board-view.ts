@@ -4,6 +4,7 @@ import type { Level, Move, MoveEvent, State, ToolName } from '@clink/rules';
 import { Application, type FederatedPointerEvent } from 'pixi.js';
 import { computeLayout } from '../layout';
 import type { BoardCallbacks, BoardOptions, BoardView, Rect } from '../types';
+import { createFpsMeter, shouldLowerEffects } from './fps';
 import { BoardScene } from './scene';
 import { type Tween, tween } from './tween';
 
@@ -13,6 +14,9 @@ const TILT_RADIANS = (15 * Math.PI) / 180;
 
 const inside = (rect: Rect, x: number, y: number): boolean =>
   x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
+
+// Read once at load: client-side navigation drops the query string.
+const SHOW_FPS = (import.meta.env.DEV || import.meta.env.MODE === 'e2e') && location.search.includes('fps=1');
 
 /** The PixiJS board. Spec: docs/architecture/05-web-app.md §4. */
 export function createBoardView(): BoardView {
@@ -32,6 +36,12 @@ export function createBoardView(): BoardView {
   let pending: (() => void) | null = null;
   let run: { skip: boolean } | null = null;
   const tweens = new Set<Tween>();
+  // A phone that cannot hold the frame rate while things move loses the particles and tilt for the session (R11).
+  const meter = createFpsMeter();
+  let degraded = false;
+  let overlay: HTMLElement | null = null;
+  let overlayTimer: ReturnType<typeof setInterval> | null = null;
+  const lowEffects = (): boolean => options.lowEffects || degraded;
 
   const startTween = (durationMs: number, onUpdate: (progress: number) => void): Tween | null => {
     if (!app) return null;
@@ -94,7 +104,7 @@ export function createBoardView(): BoardView {
       if (to !== null) scene.setWater(to, startTo + 1);
       return;
     }
-    const streaming = !options.lowEffects && !options.reducedMotion;
+    const streaming = !lowEffects() && !options.reducedMotion;
     if (streaming) scene.setStream(from, to, to === null ? null : scene.glassColor(to));
     await startTween(UNIT_MS, (p) => {
       if (from !== null) scene.setWater(from, startFrom - p);
@@ -147,7 +157,24 @@ export function createBoardView(): BoardView {
       application.stage.eventMode = 'static';
       application.stage.hitArea = application.screen;
       application.stage.on('pointerdown', onPointerDown);
-      application.ticker.add(() => scene.pulse(performance.now(), glowPeriod, options.reducedMotion));
+      application.ticker.add((ticker) => {
+        scene.pulse(performance.now(), glowPeriod, options.reducedMotion);
+        if (tweens.size === 0 || degraded) return;
+        meter.frame(ticker.deltaMS);
+        degraded = shouldLowerEffects(meter.fps());
+      });
+      // `?fps=1` shows the frame rate; only in development and end-to-end builds (NFR-03).
+      if (SHOW_FPS) {
+        const box = document.createElement('div');
+        box.style.cssText =
+          'position:absolute;top:4px;right:4px;padding:2px 6px;background:#000a;color:#fff;font:12px monospace;pointer-events:none';
+        container.style.position = 'relative';
+        container.appendChild(box);
+        overlay = box;
+        overlayTimer = setInterval(() => {
+          box.textContent = `${application.ticker.FPS.toFixed(0)} fps${degraded ? ' (low effects)' : ''}`;
+        }, 500);
+      }
       pending?.();
       pending = null;
     },
@@ -204,7 +231,7 @@ export function createBoardView(): BoardView {
         const source = first.from;
         const direction = first.to > source ? 1 : -1;
         const units = events.filter((e) => e.type === 'unit').length;
-        if (!options.reducedMotion && !options.lowEffects) {
+        if (!options.reducedMotion && !lowEffects()) {
           startTween(units * UNIT_MS, (p) =>
             scene.setTilt(source, direction * TILT_RADIANS * Math.sin(Math.PI * p)),
           );
@@ -259,6 +286,8 @@ export function createBoardView(): BoardView {
     },
 
     destroy() {
+      if (overlayTimer) clearInterval(overlayTimer);
+      overlay?.remove();
       snapAll();
       app?.destroy({ removeView: true }, { children: true });
       app = null;

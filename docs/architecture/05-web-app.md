@@ -179,7 +179,10 @@ Contract: `board/types.ts` (`BoardView`, `BoardLayout`).
   With reduced motion, only the opacity pulses.
 - **Guide highlight:** a pulsing ring around the target (glass, melody bar or tool).
 - **Frame budget:** 60 fps on the reference phones, never below 30 (NFR-03). Low-effects mode
-  drops the particles and the tilt.
+  drops the particles and the tilt. The board switches it on by itself for the rest of the
+  session when the average over the last 90 animated frames falls under 40 fps
+  (`board/pixi/fps.ts`). `?fps=1` shows the measured rate over the board in development and
+  end-to-end builds only.
 
 ### 4.2 Layout algorithm (`board/layout.ts`, pure)
 

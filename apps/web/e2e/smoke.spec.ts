@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { startMuted, waitForBoard } from './helpers';
 
 test('a fresh player chooses sound, lands in the first level, and is not asked again', async ({ page }) => {
   await page.goto('/');
@@ -22,4 +23,10 @@ test('the e2e build exposes the test hook', async ({ page }) => {
 test('unknown paths show the not-found screen', async ({ page }) => {
   await page.goto('/nowhere');
   await expect(page.locator('[data-screen="notfound"]')).toBeAttached();
+});
+
+test('?fps=1 shows the frame rate over the board in test builds (NFR-03)', async ({ page }) => {
+  await startMuted(page, '/?fps=1');
+  await waitForBoard(page);
+  await expect(page.getByTestId('board')).toContainText(/\d+ fps/);
 });
