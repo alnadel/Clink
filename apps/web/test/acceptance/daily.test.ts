@@ -17,7 +17,7 @@ import { currentStreak } from '../../src/daily/streak';
 const d = (s: string) => parseLocalDate(s);
 const LAUNCH = '2026-11-30';
 
-describe.skip('local dates', () => {
+describe('local dates', () => {
   it('parses and formats', () => {
     expect(d('2026-11-30')).toEqual({ year: 2026, month: 11, day: 30 });
     expect(formatLocalDate({ year: 2027, month: 1, day: 5 })).toBe('2027-01-05');
@@ -43,7 +43,7 @@ describe.skip('local dates', () => {
   });
 });
 
-describe.skip('puzzle numbers (rule 17, FR-21)', () => {
+describe('puzzle numbers (rule 17, FR-21)', () => {
   it('launch day is #1', () => {
     expect(puzzleNumber(d('2026-11-30'), d(LAUNCH))).toBe(1);
     expect(puzzleNumber(d('2026-12-01'), d(LAUNCH))).toBe(2);
@@ -64,7 +64,7 @@ describe.skip('puzzle numbers (rule 17, FR-21)', () => {
   });
 });
 
-describe.skip('share card (FR-22)', () => {
+describe('share card (FR-22)', () => {
   it('uses one drop per move and shows no board state', () => {
     expect(shareText({ puzzleNo: 42, moves: 6, par: 5, stars: 2, origin: 'https://clink.example' })).toBe(
       'Clink #42 ⭐⭐\n💧💧💧💧💧💧 6/5\nhttps://clink.example/d/42?src=share',
@@ -76,7 +76,7 @@ describe.skip('share card (FR-22)', () => {
   });
 });
 
-describe.skip('streak (FR-24)', () => {
+describe('streak (FR-24)', () => {
   it('counts consecutive solved puzzles ending today or yesterday', () => {
     expect(currentStreak(new Set([]), 10)).toBe(0);
     expect(currentStreak(new Set([10]), 10)).toBe(1);

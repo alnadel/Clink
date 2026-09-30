@@ -1,52 +1,37 @@
-/**
- * Local calendar dates and puzzle numbers (rule 17, FR-21).
- * Spec: docs/architecture/08-save-daily-share.md §3. All arithmetic uses Date.UTC on
- * calendar fields, so results never depend on time zones or DST.
- */
 import type { ScheduleFile } from '@clink/rules';
-import { NotImplementedError } from '../lib/not-implemented';
 import type { LocalDate } from './types';
-
-/** "2026-11-30" -> { year: 2026, month: 11, day: 30 }. Throws RangeError on anything invalid (e.g. "2026-02-30"). */
 export function parseLocalDate(text: string): LocalDate {
-  throw new NotImplementedError(`parseLocalDate(${text})`);
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+  if (!m) throw new RangeError(text);
+  const year = Number(m[1]),
+    month = Number(m[2]),
+    day = Number(m[3]);
+  const t = new Date(Date.UTC(year, month - 1, day));
+  if (t.getUTCFullYear() !== year || t.getUTCMonth() !== month - 1 || t.getUTCDate() !== day)
+    throw new RangeError(text);
+  return { year, month, day };
 }
-
-/** { year: 2026, month: 1, day: 5 } -> "2026-01-05". */
-export function formatLocalDate(date: LocalDate): string {
-  throw new NotImplementedError(`formatLocalDate(${date.year})`);
+export function formatLocalDate(d: LocalDate): string {
+  return `${String(d.year).padStart(4, '0')}-${String(d.month).padStart(2, '0')}-${String(d.day).padStart(2, '0')}`;
 }
-
-/** The calendar date of `instant` in the device's local time zone. */
-export function localDateOf(instant: Date): LocalDate {
-  throw new NotImplementedError(`localDateOf(${instant.getTime()})`);
+export function localDateOf(i: Date): LocalDate {
+  return { year: i.getFullYear(), month: i.getMonth() + 1, day: i.getDate() };
 }
-
-/** Whole days from `from` to `to` (negative if `to` is earlier). */
-export function daysBetween(from: LocalDate, to: LocalDate): number {
-  throw new NotImplementedError(`daysBetween(${from.year}, ${to.year})`);
+const utc = (d: LocalDate) => Date.UTC(d.year, d.month - 1, d.day);
+export function daysBetween(a: LocalDate, b: LocalDate): number {
+  return Math.round((utc(b) - utc(a)) / 86400000);
 }
-
-export function addDays(date: LocalDate, days: number): LocalDate {
-  throw new NotImplementedError(`addDays(${date.year}, ${days})`);
+export function addDays(d: LocalDate, n: number): LocalDate {
+  const t = new Date(utc(d) + n * 86400000);
+  return { year: t.getUTCFullYear(), month: t.getUTCMonth() + 1, day: t.getUTCDate() };
 }
-
-/** Launch day is puzzle #1. Days before launch give 0 or less. */
 export function puzzleNumber(today: LocalDate, launch: LocalDate): number {
-  throw new NotImplementedError(`puzzleNumber(${today.year}, ${launch.year})`);
+  return daysBetween(launch, today) + 1;
 }
-
-/**
- * Daily level id for a puzzle number: dailyOverrides[String(n)] first, else
- * schedule.puzzles[(n - 1) % schedule.puzzles.length] (wraps around, decision D16).
- * Returns null if n < 1 or there is nothing to play.
- */
-export function dailyLevelId(
-  puzzleNo: number,
-  schedule: ScheduleFile,
-  overrides: Readonly<Record<string, string>>,
-): string | null {
-  throw new NotImplementedError(
-    `dailyLevelId(${puzzleNo}, ${schedule.puzzles.length}, ${Object.keys(overrides).length})`,
-  );
+export function dailyLevelId(n: number, s: ScheduleFile, o: Readonly<Record<string, string>>): string | null {
+  if (n < 1) return null;
+  const ov = o[String(n)];
+  if (ov) return ov;
+  if (s.puzzles.length === 0) return null;
+  return s.puzzles[(n - 1) % s.puzzles.length] ?? null;
 }
