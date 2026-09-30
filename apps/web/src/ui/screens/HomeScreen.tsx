@@ -1,4 +1,6 @@
 import type { JSX } from 'preact';
+import { currentStreak } from '../../daily/streak';
+import { todaysPuzzle } from '../../daily/today';
 import { levelStatuses, nextLevel } from '../../game/unlocks';
 import { Screen } from '../components/Screen';
 import { useStore } from '../hooks/useStore';
@@ -9,10 +11,15 @@ export function HomeScreen(): JSX.Element {
   const { content, progress, config } = useServices();
   const t = useT();
   const currentProgress = useStore(progress);
-  const { disabledLevels } = useStore(config);
+  const { disabledLevels, dailyOverrides } = useStore(config);
   const next = nextLevel(
     levelStatuses(content.manifest().levelOrder, new Set(disabledLevels), currentProgress),
   );
+
+  const today = todaysPuzzle(new Date(), content.manifest().schedule, dailyOverrides);
+  const streak = today
+    ? currentStreak(new Set(Object.keys(currentProgress.dailies).map(Number)), today.puzzleNo)
+    : 0;
 
   return (
     <Screen title={t('app.title')}>
@@ -20,6 +27,12 @@ export function HomeScreen(): JSX.Element {
         <a class="btn btn-primary" href={next ? `/play/${next}` : '/map'}>
           {t('home.continue')}
         </a>
+        {today ? (
+          <a class="btn" href="/daily">
+            {t('home.daily', { n: today.puzzleNo })}
+            {streak > 0 ? <small class="streak">{t('home.streak', { n: streak })}</small> : null}
+          </a>
+        ) : null}
         <a class="btn" href="/map">
           {t('home.map')}
         </a>

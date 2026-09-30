@@ -62,6 +62,8 @@ export interface PlayViewState {
   hintReady: boolean;
   /** True while the play-along asks the player to tap glasses (a Skip button shows). */
   songActive: boolean;
+  /** True when this solve was the first time this level (or daily) was solved. */
+  firstSolve: boolean;
   /** i18n key of the guide line to show, or null. */
   guideTextKey: string | null;
   stars: 1 | 2 | 3 | null;
@@ -92,6 +94,7 @@ const INITIAL: PlayViewState = {
   canUndo: false,
   hintReady: false,
   songActive: false,
+  firstSolve: false,
   guideTextKey: null,
   stars: null,
   tuneTitle: '',
@@ -478,6 +481,10 @@ export function createPlayController(
     if (!level || !session) return;
     const snap = session.snapshot();
     const stars = solvedStars();
+    const firstSolve =
+      target.kind === 'daily' && target.puzzleNo !== null
+        ? !deps.progress.get().dailies[String(target.puzzleNo)]
+        : !deps.progress.get().levels[target.levelId];
     recordProgress(stars, snap.moves);
     deps.analytics.track('level_complete', { level_id: target.levelId, stars, song });
     if (target.kind === 'daily' && target.puzzleNo !== null) {
@@ -491,6 +498,7 @@ export function createPlayController(
     view.update((v) => ({
       ...v,
       status: 'solved',
+      firstSolve,
       stars,
       tuneTitle: tune?.title ?? level?.melody.title ?? '',
       tuneOrigin: tune?.origin ?? '',

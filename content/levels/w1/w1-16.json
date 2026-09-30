@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "w1-16",
+  "world": 1,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      700,
+      900
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "frere-jacques",
+    "title": "Frère Jacques",
+    "notes": [
+      "C4",
+      "D4",
+      "E4",
+      "C4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 108
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 3,
+      "emptyNote": "G4",
+      "water": 3
+    },
+    {
+      "id": "B",
+      "capacity": 12,
+      "emptyNote": "E5",
+      "water": 3
+    },
+    {
+      "id": "C",
+      "capacity": 8,
+      "emptyNote": "G5",
+      "water": 8
+    },
+    {
+      "id": "D",
+      "capacity": 9,
+      "emptyNote": "D5",
+      "water": 5
+    }
+  ],
+  "tools": [],
+  "ice": [],
+  "par": 5,
+  "optimalSolutions": 1
+}

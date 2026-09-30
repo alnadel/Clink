@@ -5,7 +5,154 @@
       "title": "Twinkle Twinkle Little Star",
       "origin": "French melody \"Ah! vous dirai-je, maman\", 1761",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w1-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "C4",
+            "G4",
+            "G4",
+            "A4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 100
+        },
+        {
+          "id": "w2-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "C4",
+            "G4",
+            "G4",
+            "A4",
+            "A4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 100
+        },
+        {
+          "id": "w2-major-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "G4",
+            "F4",
+            "F4",
+            "E4",
+            "E4",
+            "D4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 100
+        },
+        {
+          "id": "w3-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "G4",
+            "F4",
+            "F4",
+            "E4",
+            "E4",
+            "D4",
+            "D4",
+            "C4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 100
+        }
+      ]
     },
     "mary-had-a-little-lamb": {
       "title": "Mary Had a Little Lamb",
@@ -48,6 +195,74 @@
             2
           ],
           "bpm": 100
+        },
+        {
+          "id": "w1-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "E4",
+            "D4",
+            "C4",
+            "D4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 100
+        },
+        {
+          "id": "w2-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "E4",
+            "D4",
+            "C4",
+            "D4",
+            "E4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 100
         }
       ]
     },
@@ -55,49 +270,582 @@
       "title": "Frère Jacques",
       "origin": "French round, 18th century",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w1-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "D4",
+            "E4",
+            "C4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 108
+        }
+      ]
     },
     "ode-to-joy": {
       "title": "Ode to Joy",
       "origin": "Beethoven, Symphony No. 9, 1824",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w2-major-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "E4",
+            "E4",
+            "F4",
+            "G4",
+            "G4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 108
+        },
+        {
+          "id": "w3-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "E4",
+            "E4",
+            "F4",
+            "G4",
+            "G4",
+            "F4",
+            "E4",
+            "D4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 108
+        }
+      ]
     },
     "brahms-lullaby": {
       "title": "Brahms' Lullaby",
       "origin": "Brahms, Wiegenlied Op. 49 No. 4, 1868",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w1-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "E4",
+            "E4",
+            "G4"
+          ],
+          "beats": [
+            1,
+            1,
+            2
+          ],
+          "bpm": 84
+        },
+        {
+          "id": "w2-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "E4",
+            "E4",
+            "G4",
+            "E4",
+            "E4",
+            "G4"
+          ],
+          "beats": [
+            1,
+            1,
+            2,
+            1,
+            1,
+            2
+          ],
+          "bpm": 84
+        }
+      ]
     },
     "london-bridge": {
       "title": "London Bridge",
       "origin": "English nursery rhyme",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w2-major-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "G4",
+            "A4",
+            "G4",
+            "F4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 104
+        },
+        {
+          "id": "w3-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "G4",
+            "A4",
+            "G4",
+            "F4",
+            "E4",
+            "F4",
+            "G4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 104
+        }
+      ]
     },
     "row-row-row-your-boat": {
       "title": "Row Row Row Your Boat",
       "origin": "American nursery rhyme, 1852",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w1-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "C4",
+            "C4",
+            "D4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            0.75,
+            0.25,
+            1
+          ],
+          "bpm": 96
+        },
+        {
+          "id": "w2-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "C4",
+            "C4",
+            "D4",
+            "E4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            0.75,
+            0.25,
+            1,
+            0.75
+          ],
+          "bpm": 96
+        }
+      ]
     },
     "oh-susanna": {
       "title": "Oh! Susanna",
       "origin": "Stephen Foster, 1848",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w1-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "D4",
+            "E4",
+            "G4",
+            "G4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 112
+        },
+        {
+          "id": "w2-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "D4",
+            "E4",
+            "G4",
+            "G4",
+            "A4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 112
+        }
+      ]
     },
     "morning-mood": {
       "title": "Morning Mood",
       "origin": "Grieg, Peer Gynt, 1875",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w1-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "G4",
+            "E4",
+            "D4",
+            "C4",
+            "D4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 88
+        },
+        {
+          "id": "w2-a",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "G4",
+            "E4",
+            "D4",
+            "C4",
+            "D4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 88
+        }
+      ]
     },
     "in-the-hall-of-the-mountain-king": {
       "title": "In the Hall of the Mountain King",
       "origin": "Grieg, Peer Gynt, 1875",
       "rights": "pending",
-      "phrases": []
+      "phrases": [
+        {
+          "id": "w2-major-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "D4",
+            "E4",
+            "F4",
+            "G4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 120
+        },
+        {
+          "id": "w3-a",
+          "scale": {
+            "name": "C major",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              500,
+              700,
+              900,
+              1100
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "C4",
+            "D4",
+            "E4",
+            "F4",
+            "G4",
+            "E4",
+            "G4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "bpm": 120
+        }
+      ]
     },
     "can-can": {
       "title": "The Can-Can",

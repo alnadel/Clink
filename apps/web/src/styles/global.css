@@ -286,3 +286,136 @@ a {
   border-radius: var(--radius);
   margin-inline: 12px;
 }
+
+.streak {
+  margin-inline-start: 10px;
+  color: #fde047;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-block-size: var(--tap-min);
+}
+
+.row input[type="checkbox"] {
+  inline-size: 28px;
+  block-size: 28px;
+  accent-color: var(--accent);
+}
+
+.segments {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.segment {
+  min-block-size: var(--tap-min);
+  min-inline-size: var(--tap-min);
+  padding-inline: 12px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  color: var(--fg);
+  background: var(--surface-2);
+  cursor: pointer;
+}
+
+.segment.selected {
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 700;
+}
+
+.settings h2 {
+  margin-block: 16px 0;
+  font-size: 1.05rem;
+}
+
+.code {
+  display: block;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-family: ui-monospace, monospace;
+  word-break: break-all;
+  user-select: all;
+}
+
+.row-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.text-input {
+  min-block-size: var(--tap-min);
+  border-radius: var(--radius);
+  border: 2px solid var(--surface-2);
+  background: var(--surface);
+  color: var(--fg);
+  padding-inline: 12px;
+  font: inherit;
+}
+
+.error {
+  color: #fca5a5;
+}
+
+.prose p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+fieldset.segmented {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.segment:focus-within {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.songbook {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.songbook li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: var(--radius);
+}

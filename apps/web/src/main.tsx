@@ -20,7 +20,10 @@ import { browserOf, platformOf, shouldStartSession } from './ops/session';
 import { createSaveStore, idbBackend } from './save/store';
 import type { Profile, Progress } from './save/types';
 import './styles/global.css';
+import { captureInstallPrompt } from './platform/install';
+import { registerServiceWorker } from './platform/sw';
 import { installTestHook, registerTestTarget } from './testing/hook';
+import { showToast } from './ui/components/Toast';
 import type { Services } from './ui/services';
 import { createHintClient } from './workers/hint-client';
 
@@ -128,6 +131,17 @@ async function bootstrap(): Promise<void> {
     progress: progressStore,
   };
   render(<App services={services} />, root as HTMLElement);
+
+  captureInstallPrompt(() =>
+    analytics.track('install', { platform: platformOf(navigator.userAgent, navigator.maxTouchPoints) }),
+  );
+  registerServiceWorker(() => showToast(services.i18n.get().t('app.updated')));
+  // Cache every level pack a few seconds after start so the whole game works offline (FR-35).
+  setTimeout(() => {
+    void content.warm().then(() => registerTestTarget({ warmed: () => true }));
+  }, 5000);
+  // Ask the browser not to evict our saves, after the first user gesture (NFR-08).
+  document.addEventListener('pointerdown', () => void save.requestPersistence(), { once: true });
 }
 
 bootstrap().catch((error: unknown) => {

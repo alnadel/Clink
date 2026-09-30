@@ -8,14 +8,24 @@ import type { BoardOptions, BoardView } from '../../board/types';
 import { createPlayController, type PlayController, type PlayTarget } from '../../game/play-controller';
 import { levelStatuses } from '../../game/unlocks';
 import { setCurrentLevelId } from '../../ops/errors';
+import {
+  canPromptNatively,
+  isInstalled,
+  isIosSafari,
+  shouldShowInstallPrompt,
+  shouldShowSurvey,
+} from '../../platform/install';
 import { resolveReducedMotion, systemPrefersReducedMotion } from '../../platform/motion';
 import { registerTestTarget } from '../../testing/hook';
 import { GuideBanner } from '../components/GuideBanner';
 import { Hud } from '../components/Hud';
+import { InstallPrompt } from '../components/InstallPrompt';
 import { SolveCard } from '../components/SolveCard';
+import { SurveyModal } from '../components/SurveyModal';
 import { showToast } from '../components/Toast';
 import { useStore } from '../hooks/useStore';
 import { type Services, useServices, useT } from '../services';
+import { shareResult } from '../share';
 
 interface PlayScreenProps {
   levelId?: string;
@@ -45,6 +55,12 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
       play.levelId,
     ) === 'locked';
   const view = useStore(controller?.view ?? null);
+  const [prompt, setPrompt] = useState<{ kind: 'install' | 'survey'; then: () => void } | null>(null);
+
+  // The new-player tutorial from a shared link: play the tutorial levels, then land in today's daily (FR-23).
+  const manifest = services.content.manifest();
+  const tutorial = location.query.tutorial === '1';
+  const tutorialIds = manifest.guides.linkTutorial.filter((id) => manifest.levelOrder.includes(id));
 
   useEffect(() => {
     if (locked) {
@@ -123,11 +139,60 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
     });
   }, [labels, reducedMotion]);
 
+  const share = async (): Promise<void> => {
+    if (!view || view.stars === null || play.puzzleNo === null) return;
+    const outcome = await shareResult({
+      puzzleNo: play.puzzleNo,
+      moves: services.progress.get().dailies[String(play.puzzleNo)]?.moves ?? view.moves,
+      par: view.par,
+      stars: services.progress.get().dailies[String(play.puzzleNo)]?.stars ?? view.stars,
+      origin: window.location.origin,
+    });
+    if (outcome === 'share' || outcome === 'clipboard') {
+      services.analytics.track('share_complete', { puzzle_no: play.puzzleNo, method: outcome });
+      if (outcome === 'clipboard') showToast(t('daily.copied'));
+    } else if (outcome === 'failed') {
+      showToast(t('daily.shareFailed'));
+    }
+  };
+
+  /** After the solve card's action, show an install prompt or the survey first if one is due (D18, D19). */
+  const proceed = (then: () => void) => () => {
+    const firstSolve = play.kind === 'campaign' && view?.firstSolve === true;
+    if (shouldShowSurvey(play.levelId, firstSolve, profile.surveyAnswered)) {
+      setPrompt({ kind: 'survey', then });
+    } else if (
+      shouldShowInstallPrompt(play.levelId, firstSolve, profile, isInstalled()) &&
+      (canPromptNatively() || isIosSafari())
+    ) {
+      services.profile.update((p) => ({ ...p, installPromptCount: p.installPromptCount + 1 }));
+      setPrompt({ kind: 'install', then });
+    } else {
+      then();
+    }
+  };
+
+  const goNext = (): void => {
+    if (!tutorial) {
+      if (view?.nextLevelId) location.route(`/play/${view.nextLevelId}`);
+      return;
+    }
+    const next = tutorialIds[tutorialIds.indexOf(play.levelId) + 1];
+    if (next) {
+      location.route(`/play/${next}?tutorial=1`);
+      return;
+    }
+    services.profile.update((p) =>
+      p.seenGuides.includes('linkTutorial') ? p : { ...p, seenGuides: [...p.seenGuides, 'linkTutorial'] },
+    );
+    location.route('/daily');
+  };
+
   const title =
     play.kind === 'daily'
       ? t('play.daily', { n: play.puzzleNo ?? '' })
       : t('play.level', { n: play.levelId });
-  const back = play.kind === 'daily' ? '/' : '/map';
+  const back = play.kind === 'daily' || tutorial ? '/' : '/map';
 
   return (
     <div class="play">
@@ -159,12 +224,33 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
           tuneTitle={view.tuneTitle}
           tuneOrigin={view.tuneOrigin}
           kind={play.kind}
-          hasNext={view.nextLevelId !== null}
-          onNext={() => view.nextLevelId && location.route(`/play/${view.nextLevelId}`)}
+          hasNext={tutorial || view.nextLevelId !== null}
+          onNext={proceed(goNext)}
           onReplay={() => controller?.replaySong()}
           onRetry={() => void controller?.retry()}
-          onMap={() => location.route('/map')}
+          onMap={proceed(() => location.route('/map'))}
           onHome={() => location.route('/')}
+          onShare={() => void share()}
+        />
+      ) : null}
+      {prompt?.kind === 'install' ? (
+        <InstallPrompt
+          onClose={() => {
+            const { then } = prompt;
+            setPrompt(null);
+            then();
+          }}
+        />
+      ) : null}
+      {prompt?.kind === 'survey' ? (
+        <SurveyModal
+          onAnswer={(answer) => {
+            const { then } = prompt;
+            services.analytics.track('survey_answer', { answer });
+            services.profile.update((p) => ({ ...p, surveyAnswered: true }));
+            setPrompt(null);
+            then();
+          }}
         />
       ) : null}
     </div>

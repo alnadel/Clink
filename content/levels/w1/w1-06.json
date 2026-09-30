@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "w1-06",
+  "world": 1,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      700,
+      900
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "morning-mood",
+    "title": "Morning Mood",
+    "notes": [
+      "G4",
+      "E4",
+      "D4",
+      "C4",
+      "D4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 88
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 5,
+      "emptyNote": "G5",
+      "water": 4
+    },
+    {
+      "id": "B",
+      "capacity": 10,
+      "emptyNote": "D5",
+      "water": 3
+    },
+    {
+      "id": "C",
+      "capacity": 5,
+      "emptyNote": "G4",
+      "water": 4
+    },
+    {
+      "id": "D",
+      "capacity": 8,
+      "emptyNote": "A4",
+      "water": 4
+    }
+  ],
+  "tools": [],
+  "ice": [],
+  "par": 3,
+  "optimalSolutions": 1
+}

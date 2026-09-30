@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "w1-18",
+  "world": 1,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      700,
+      900
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "twinkle-twinkle-little-star",
+    "title": "Twinkle Twinkle Little Star",
+    "notes": [
+      "C4",
+      "C4",
+      "G4",
+      "G4",
+      "A4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 100
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 6,
+      "emptyNote": "A5",
+      "water": 5
+    },
+    {
+      "id": "B",
+      "capacity": 12,
+      "emptyNote": "E5",
+      "water": 11
+    },
+    {
+      "id": "C",
+      "capacity": 8,
+      "emptyNote": "G4",
+      "water": 1
+    },
+    {
+      "id": "D",
+      "capacity": 5,
+      "emptyNote": "D5",
+      "water": 2
+    }
+  ],
+  "tools": [],
+  "ice": [],
+  "par": 5,
+  "optimalSolutions": 1
+}

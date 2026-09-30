@@ -2,6 +2,7 @@ import type { JSX } from 'preact';
 import { LocationProvider, Route, Router } from 'preact-iso';
 import { ToastHost } from './ui/components/Toast';
 import { SoundChoice } from './ui/SoundChoice';
+import { DailyScreen } from './ui/screens/DailyScreen';
 import { HomeScreen } from './ui/screens/HomeScreen';
 import { LinkScreen } from './ui/screens/LinkScreen';
 import { MapScreen } from './ui/screens/MapScreen';
@@ -22,7 +23,7 @@ export function App({ services }: { services: Services }): JSX.Element {
           <Route path="/" component={HomeScreen} />
           <Route path="/map" component={MapScreen} />
           <Route path="/play/:levelId" component={PlayScreen} />
-          <Route path="/daily" component={() => <PlayScreen kind="daily" />} />
+          <Route path="/daily" component={DailyScreen} />
           <Route path="/d/:n" component={LinkScreen} />
           <Route path="/songbook" component={SongbookScreen} />
           <Route path="/settings" component={SettingsScreen} />
