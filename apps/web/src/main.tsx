@@ -97,7 +97,7 @@ async function bootstrap(): Promise<void> {
   const analytics = createAnalytics({ adapter, profile: profileStore, backend, appVersion: __APP_VERSION__ });
   await analytics.init();
   setErrorReporter(createAnalyticsErrorReporter(analytics));
-  if (memory) registerTestTarget({ events: () => memory.events() });
+  if (import.meta.env.MODE === 'e2e' && memory) registerTestTarget({ events: () => memory.events() });
   if (params.get('debug') === 'throw') setTimeout(() => reportError(new Error('clink test error')), 1000);
 
   const audio = createAudioEngine({ enabled: profile.settings.sound });
@@ -154,7 +154,9 @@ async function bootstrap(): Promise<void> {
   registerServiceWorker(() => showToast(services.i18n.get().t('app.updated')));
   // Cache every level pack a few seconds after start so the whole game works offline (FR-35).
   setTimeout(() => {
-    void content.warm().then(() => registerTestTarget({ warmed: () => true }));
+    void content.warm().then(() => {
+      if (import.meta.env.MODE === 'e2e') registerTestTarget({ warmed: () => true });
+    });
   }, 5000);
   // Ask the browser not to evict our saves, after the first user gesture (NFR-08).
   document.addEventListener('pointerdown', () => void save.requestPersistence(), { once: true });

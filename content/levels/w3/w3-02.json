@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "w3-02",
+  "world": 3,
+  "scale": {
+    "name": "C major",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      500,
+      700,
+      900,
+      1100
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "in-the-hall-of-the-mountain-king",
+    "title": "In the Hall of the Mountain King",
+    "notes": [
+      "C4",
+      "D4",
+      "E4",
+      "F4",
+      "G4",
+      "E4",
+      "G4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 120
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 2,
+      "emptyNote": "G4",
+      "water": 0
+    },
+    {
+      "id": "B",
+      "capacity": 2,
+      "emptyNote": "C4",
+      "water": 2
+    },
+    {
+      "id": "C",
+      "capacity": 4,
+      "emptyNote": "G4",
+      "water": 1
+    },
+    {
+      "id": "D",
+      "capacity": 4,
+      "emptyNote": "C5",
+      "water": 0
+    },
+    {
+      "id": "E",
+      "capacity": 4,
+      "emptyNote": "C5",
+      "water": 1
+    }
+  ],
+  "tools": [
+    "faucet"
+  ],
+  "ice": [
+    {
+      "glass": "B",
+      "countdown": 5
+    }
+  ],
+  "par": 6,
+  "optimalSolutions": 1399
+}

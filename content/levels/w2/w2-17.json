@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "w2-17",
+  "world": 2,
+  "scale": {
+    "name": "C major",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      500,
+      700,
+      900,
+      1100
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "london-bridge",
+    "title": "London Bridge",
+    "notes": [
+      "G4",
+      "A4",
+      "G4",
+      "F4",
+      "E4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 104
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 5,
+      "emptyNote": "B4",
+      "water": 5
+    },
+    {
+      "id": "B",
+      "capacity": 6,
+      "emptyNote": "G4",
+      "water": 5
+    },
+    {
+      "id": "C",
+      "capacity": 3,
+      "emptyNote": "G4",
+      "water": 0
+    },
+    {
+      "id": "D",
+      "capacity": 3,
+      "emptyNote": "G4",
+      "water": 3
+    }
+  ],
+  "tools": [
+    "sink"
+  ],
+  "ice": [],
+  "par": 8,
+  "optimalSolutions": 4
+}

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "d030",
+  "world": 2,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      700,
+      900
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "brahms-lullaby",
+    "title": "Brahms' Lullaby",
+    "notes": [
+      "E4",
+      "E4",
+      "G4",
+      "E4",
+      "E4",
+      "G4"
+    ],
+    "beats": [
+      1,
+      1,
+      2,
+      1,
+      1,
+      2
+    ],
+    "bpm": 84
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 11,
+      "emptyNote": "A5",
+      "water": 0
+    },
+    {
+      "id": "B",
+      "capacity": 11,
+      "emptyNote": "G5",
+      "water": 0
+    },
+    {
+      "id": "C",
+      "capacity": 3,
+      "emptyNote": "A4",
+      "water": 2
+    }
+  ],
+  "tools": [
+    "faucet",
+    "sink"
+  ],
+  "ice": [],
+  "par": 6,
+  "optimalSolutions": 1
+}

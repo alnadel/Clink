@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "d016",
+  "world": 1,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      700,
+      900
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "oh-susanna",
+    "title": "Oh! Susanna",
+    "notes": [
+      "C4",
+      "D4",
+      "E4",
+      "G4",
+      "G4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 112
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 4,
+      "emptyNote": "D4",
+      "water": 2
+    },
+    {
+      "id": "B",
+      "capacity": 2,
+      "emptyNote": "D4",
+      "water": 0
+    },
+    {
+      "id": "C",
+      "capacity": 6,
+      "emptyNote": "C5",
+      "water": 0
+    },
+    {
+      "id": "D",
+      "capacity": 5,
+      "emptyNote": "D5",
+      "water": 5
+    }
+  ],
+  "tools": [],
+  "ice": [],
+  "par": 4,
+  "optimalSolutions": 1
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "w2-20",
+  "world": 2,
+  "scale": {
+    "name": "C major",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      500,
+      700,
+      900,
+      1100
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "ode-to-joy",
+    "title": "Ode to Joy",
+    "notes": [
+      "E4",
+      "E4",
+      "F4",
+      "G4",
+      "G4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 108
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 9,
+      "emptyNote": "G4",
+      "water": 8
+    },
+    {
+      "id": "B",
+      "capacity": 11,
+      "emptyNote": "A5",
+      "water": 9
+    },
+    {
+      "id": "C",
+      "capacity": 10,
+      "emptyNote": "C5",
+      "water": 1
+    }
+  ],
+  "tools": [
+    "sink"
+  ],
+  "ice": [],
+  "par": 8,
+  "optimalSolutions": 1
+}

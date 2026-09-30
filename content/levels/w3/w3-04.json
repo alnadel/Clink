@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "id": "w3-04",
+  "world": 3,
+  "scale": {
+    "name": "C major",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      500,
+      700,
+      900,
+      1100
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "ode-to-joy",
+    "title": "Ode to Joy",
+    "notes": [
+      "E4",
+      "E4",
+      "F4",
+      "G4",
+      "G4",
+      "F4",
+      "E4",
+      "D4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 108
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 2,
+      "emptyNote": "G5",
+      "water": 2
+    },
+    {
+      "id": "B",
+      "capacity": 3,
+      "emptyNote": "B4",
+      "water": 1
+    },
+    {
+      "id": "C",
+      "capacity": 3,
+      "emptyNote": "E4",
+      "water": 0
+    },
+    {
+      "id": "D",
+      "capacity": 4,
+      "emptyNote": "D4",
+      "water": 0
+    },
+    {
+      "id": "E",
+      "capacity": 3,
+      "emptyNote": "A4",
+      "water": 0
+    }
+  ],
+  "tools": [
+    "sink"
+  ],
+  "ice": [
+    {
+      "glass": "D",
+      "countdown": 4
+    },
+    {
+      "glass": "E",
+      "countdown": 6
+    },
+    {
+      "glass": "D",
+      "countdown": 5
+    }
+  ],
+  "par": 6,
+  "optimalSolutions": 10900
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "id": "d003",
+  "world": 1,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      700,
+      900
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "row-row-row-your-boat",
+    "title": "Row Row Row Your Boat",
+    "notes": [
+      "C4",
+      "C4",
+      "C4",
+      "D4",
+      "E4"
+    ],
+    "beats": [
+      1,
+      1,
+      0.75,
+      0.25,
+      1
+    ],
+    "bpm": 96
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 10,
+      "emptyNote": "A5",
+      "water": 0
+    },
+    {
+      "id": "B",
+      "capacity": 12,
+      "emptyNote": "G5",
+      "water": 12
+    },
+    {
+      "id": "C",
+      "capacity": 10,
+      "emptyNote": "C5",
+      "water": 4
+    },
+    {
+      "id": "D",
+      "capacity": 9,
+      "emptyNote": "G5",
+      "water": 6
+    }
+  ],
+  "tools": [],
+  "ice": [],
+  "par": 4,
+  "optimalSolutions": 1
+}

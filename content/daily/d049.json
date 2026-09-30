@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "id": "d049",
+  "world": 3,
+  "scale": {
+    "name": "C major",
+    "tonicHz": 130.81,
+    "stepsCents": [
+      0,
+      200,
+      400,
+      500,
+      700,
+      900,
+      1100
+    ],
+    "range": [
+      "C3",
+      "A5"
+    ]
+  },
+  "melody": {
+    "tuneId": "twinkle-twinkle-little-star",
+    "title": "Twinkle Twinkle Little Star",
+    "notes": [
+      "G4",
+      "F4",
+      "F4",
+      "E4",
+      "E4",
+      "D4",
+      "D4",
+      "C4"
+    ],
+    "beats": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "bpm": 100
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 2,
+      "emptyNote": "B4",
+      "water": 1
+    },
+    {
+      "id": "B",
+      "capacity": 4,
+      "emptyNote": "B4",
+      "water": 4
+    },
+    {
+      "id": "C",
+      "capacity": 4,
+      "emptyNote": "C4",
+      "water": 0
+    },
+    {
+      "id": "D",
+      "capacity": 2,
+      "emptyNote": "E4",
+      "water": 0
+    },
+    {
+      "id": "E",
+      "capacity": 3,
+      "emptyNote": "B4",
+      "water": 3
+    }
+  ],
+  "tools": [],
+  "ice": [
+    {
+      "glass": "C",
+      "countdown": 4
+    },
+    {
+      "glass": "A",
+      "countdown": 8
+    }
+  ],
+  "par": 8,
+  "optimalSolutions": 234127
+}
