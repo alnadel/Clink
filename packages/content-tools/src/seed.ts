@@ -258,16 +258,21 @@ interface Attempt {
 
 const EASIER: Record<Slot['band'], Slot['band']> = { hard: 'medium', medium: 'easy', easy: 'easy' };
 
-/** The searches to try for a slot, in order. */
+/**
+ * The searches to try for a slot, in order: the planned phrase, then the next easier band with it, then
+ * the other phrases of the world at that easier band. (Bands above the generator's reach, such as World 3
+ * hard, would otherwise burn a long search per phrase before giving in.)
+ */
 function alternatives(slot: Slot): Attempt[] {
   const [tune, phrase] = pick(slot.phrases, 0);
   const pool = slot.world === 1 ? W1 : slot.world === 2 ? [...W2_PENT, ...W2_MAJOR] : W3;
+  const easier = EASIER[slot.band];
   const list: Attempt[] = [{ tune, phrase, band: slot.band, quick: false }];
+  if (easier !== slot.band) list.push({ tune, phrase, band: easier, quick: true });
   for (const [otherTune, otherPhrase] of pool) {
     if (otherTune !== tune || otherPhrase !== phrase)
-      list.push({ tune: otherTune, phrase: otherPhrase, band: slot.band, quick: true });
+      list.push({ tune: otherTune, phrase: otherPhrase, band: easier, quick: true });
   }
-  if (EASIER[slot.band] !== slot.band) list.push({ tune, phrase, band: EASIER[slot.band], quick: true });
   return list;
 }
 
