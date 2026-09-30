@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { fnv1a32, fnv1a32Bytes, hex8 } from '../../src';
 
-describe.skip('fnv1a32', () => {
+describe('fnv1a32', () => {
   it.each([
     ['', 2166136261],
     ['a', 3826002220],

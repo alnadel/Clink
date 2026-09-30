@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { parseNote } from '../../src';
 import { levelErrorCode } from '../helpers';
 
-describe.skip('parseNote', () => {
+describe('parseNote', () => {
   it.each([
     ['C4', 6000],
     ['A4', 6900],
