@@ -20,7 +20,8 @@
     "levels:prove": "tsx packages/content-tools/src/cli/prove.ts",
     "packs:build": "tsx packages/content-tools/src/cli/packs.ts",
     "levels:gen": "tsx packages/content-tools/src/cli/gen.ts",
-    "test:e2e": "pnpm --filter @clink/web exec playwright test"
+    "test:e2e": "pnpm --filter @clink/web exec playwright test",
+    "content:seed": "tsx packages/content-tools/src/cli/seed.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
