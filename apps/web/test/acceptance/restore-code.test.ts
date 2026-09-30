@@ -32,7 +32,7 @@ const V_EMPTY = '2000-0000-0000-0000-0000-0000-0010-43SA';
 const V_SOME = '3YVY-0000-0000-0000-0000-0000-00AE-2TBK-1T';
 const V_FULL = '3ZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ-Y3SZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZ0-48FY';
 
-describe.skip('restore code', () => {
+describe('restore code', () => {
   it('encodes to the exact golden strings', () => {
     expect(encodeRestoreCode(empty)).toBe(V_EMPTY);
     expect(encodeRestoreCode(some)).toBe(V_SOME);
