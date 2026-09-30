@@ -22,6 +22,7 @@ pnpm verify        # lint, typecheck, tests, build, size budget
 pnpm dev           # web app; `/dev/level` is the level workbench
 pnpm test:e2e      # Playwright (set PW_CHROMIUM_EXECUTABLE to use a preinstalled Chromium)
 pnpm test:coverage # rules engine coverage floor (90%)
+pnpm test:e2e:full # slow soak: play all 120 levels through the UI (E2E_FULL=1)
 ```
 
 Content commands:

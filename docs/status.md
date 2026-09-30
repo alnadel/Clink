@@ -21,6 +21,7 @@ What is built, how it was checked, and what only people can supply. Updated as w
 
 - `pnpm verify`: lint and format, typecheck, unit tests, production build, no test hook in the build, size budget.
 - `pnpm test:e2e`: Playwright in Chromium: first-run flow, campaign and unlocks, guided levels, world 2 faucet intro, hints and stars, daily and share text, streak, shared-link tutorial, settings, RTL, restore round trip, offline play, install prompt, survey, analytics order, CSP headers, axe.
+- `pnpm test:e2e:full` (slow, not part of CI): every one of the 60 campaign levels and 60 daily puzzles is played to the end with real taps, following the solver's hints, and finishes in exactly par moves.
 - WebKit runs in CI only (the sandbox has no WebKit).
 
 ## Needs people
