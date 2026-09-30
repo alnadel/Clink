@@ -13,6 +13,9 @@ import {
 import type { AudioEngine, PhrasePlayback } from '../audio/types';
 import type { BoardCallbacks, BoardOptions, BoardView } from '../board/types';
 import type { ContentStore } from '../content/store';
+import { createGuideDriver, type GuideDriver } from '../guide/driver';
+import type { GuideEvent } from '../guide/runner';
+import { selectScripts } from '../guide/select';
 import { createStore, type Store } from '../lib/store';
 import type { Analytics } from '../ops/events';
 import type { ResolvedFlags } from '../ops/flags';
@@ -59,6 +62,8 @@ export interface PlayViewState {
   hintReady: boolean;
   /** True while the play-along asks the player to tap glasses (a Skip button shows). */
   songActive: boolean;
+  /** i18n key of the guide line to show, or null. */
+  guideTextKey: string | null;
   stars: 1 | 2 | 3 | null;
   tuneTitle: string;
   tuneOrigin: string;
@@ -87,6 +92,7 @@ const INITIAL: PlayViewState = {
   canUndo: false,
   hintReady: false,
   songActive: false,
+  guideTextKey: null,
   stars: null,
   tuneTitle: '',
   tuneOrigin: '',
@@ -119,6 +125,7 @@ export function createPlayController(
   let songTap: ((glass: number) => void) | null = null;
   let songSkip: (() => void) | null = null;
   let replay: PhrasePlayback | null = null;
+  let guide: GuideDriver | null = null;
   const timers = new Set<ReturnType<typeof setTimeout>>();
 
   const elapsedMs = (): number =>
@@ -132,7 +139,10 @@ export function createPlayController(
       visibleSince = now;
     }
   };
-  const onPageHide = (): void => sendAbandon();
+  const onPageHide = (): void => {
+    persist();
+    sendAbandon();
+  };
   document.addEventListener('visibilitychange', onVisibility);
   window.addEventListener('pagehide', onPageHide);
 
@@ -195,6 +205,45 @@ export function createPlayController(
     return order.slice(start + 1).find((id) => !disabled.has(id)) ?? null;
   };
 
+  // --- guides (onboarding, intros) --------------------------------------------------------------
+
+  const applyGuideStep = (): void => {
+    const step = guide?.current() ?? null;
+    view.update((v) => ({ ...v, guideTextKey: step?.textKey ?? null }));
+    board.setGuideHighlight(step?.highlight ?? null);
+  };
+
+  const feedGuide = (events: readonly GuideEvent[]): void => {
+    if (!guide) return;
+    const result = guide.feed(events);
+    if (result.completedStep) deps.analytics.track('ftue_step', { step: result.completedStep });
+    const finished = result.finishedScript;
+    if (finished) {
+      deps.profile.update((p) =>
+        p.seenGuides.includes(finished) ? p : { ...p, seenGuides: [...p.seenGuides, finished] },
+      );
+    }
+    if (result.completedStep) applyGuideStep();
+  };
+
+  const guideEvents = (effects: readonly GameEffect[]): GuideEvent[] => {
+    const events: GuideEvent[] = [];
+    for (const effect of effects) {
+      if (effect.type === 'ring') events.push({ on: 'ring', glass: effect.glass });
+      else if (effect.type === 'move') {
+        const move = effect.move;
+        events.push(
+          move.type === 'pour'
+            ? { on: 'pour', from: move.from, to: move.to }
+            : { on: 'tool', tool: move.type },
+        );
+      } else if (effect.type === 'found')
+        for (const target of effect.gained) events.push({ on: 'found', target });
+      else if (effect.type === 'tuned') events.push({ on: 'tuned' });
+    }
+    return events;
+  };
+
   // --- opening a level --------------------------------------------------------------------------
 
   const open = async (resume: boolean): Promise<void> => {
@@ -254,6 +303,19 @@ export function createPlayController(
       canUndo: snap.canUndo,
       nextLevelId: nextLevelId(),
     });
+    const variant = deps.flags.get().flags.onboardingVariant;
+    guide = createGuideDriver(
+      snap.tuned
+        ? []
+        : selectScripts(
+            target.levelId,
+            level,
+            deps.content.manifest().guides,
+            deps.profile.get().seenGuides,
+            typeof variant === 'string' ? variant : 'a',
+          ),
+    );
+    applyGuideStep();
     if (!resumable) persist();
     deps.analytics.track('level_start', { level_id: target.levelId, world: level.world, attempt });
     if (target.kind === 'daily' && target.puzzleNo !== null)
@@ -500,7 +562,16 @@ export function createPlayController(
   };
 
   const run = (effects: GameEffect[]): void => {
+    // Save the moment the session accepts a move, not when its animation ends: a player who closes the
+    // tab half a second after a move must not lose it (FR-32).
+    if (effects.some((e) => e.type === 'move' || e.type === 'undo' || e.type === 'restart')) persist();
     void handleEffects(effects);
+  };
+
+  /** Runs an accepted input's effects and tells the guide what happened. */
+  const runInput = (effects: GameEffect[]): void => {
+    feedGuide([...guideEvents(effects), { on: 'tap' }]);
+    run(effects);
   };
 
   const callbacks: BoardCallbacks = {
@@ -513,18 +584,23 @@ export function createPlayController(
         if (pos !== undefined) deps.audio.ring(hz(pos));
         return;
       }
-      run(session.tapGlass(glass));
+      if (guide && !guide.allows({ kind: 'glass', glass })) return applyGuideStep();
+      runInput(session.tapGlass(glass));
     },
     onMelodyTap() {
       unlockAudio();
       if (!level) return;
+      if (guide && !guide.allows({ kind: 'melody' })) return applyGuideStep();
+      feedGuide([{ on: 'melody' }, { on: 'tap' }]);
       replay?.stop();
       replay = playPhrase();
       void replay.done.then(() => board.setMelodyCursor(null));
     },
     onToolTap(tool: ToolName) {
       unlockAudio();
-      if (session) run(session.tapTool(tool));
+      if (!session) return;
+      if (guide && !guide.allows({ kind: 'tool', tool })) return applyGuideStep();
+      runInput(session.tapTool(tool));
     },
   };
 
@@ -536,7 +612,7 @@ export function createPlayController(
     level: () => level,
     snapshot: () => session?.snapshot() ?? null,
     undo() {
-      if (session) run(session.undo());
+      if (session && (!guide || guide.allows({ kind: 'undo' }))) runInput(session.undo());
     },
     restart() {
       if (session) run(session.restart());
@@ -544,7 +620,7 @@ export function createPlayController(
     async hint() {
       if (!session || !level) return;
       const snap = session.snapshot();
-      if (snap.tuned) return;
+      if (snap.tuned || (guide && !guide.allows({ kind: 'hint' }))) return;
       let result: Hint;
       try {
         result = await deps.hints.hint(level.id, snap.state);

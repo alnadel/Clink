@@ -6,23 +6,36 @@ import { createAudioEngine } from './audio/engine';
 import { loadContent } from './content/store';
 import { createI18n } from './i18n/i18n';
 import { createStore } from './lib/store';
-import { createConsoleAnalytics } from './ops/console-analytics';
-import type { ResolvedFlags } from './ops/flags';
-import { createSaveStore } from './save/store';
+import { createConsoleAdapter, createMemoryAdapter, createNullAdapter } from './ops/adapters';
+import { createAnalytics } from './ops/analytics';
+import { loadRemoteConfig, startConfigRefresh } from './ops/config';
+import {
+  createAnalyticsErrorReporter,
+  installErrorHandlers,
+  reportError,
+  setErrorReporter,
+} from './ops/errors';
+import { type ResolvedFlags, resolveFlags } from './ops/flags';
+import { browserOf, platformOf, shouldStartSession } from './ops/session';
+import { createSaveStore, idbBackend } from './save/store';
 import type { Profile, Progress } from './save/types';
-import { installTestHook } from './testing/hook';
 import './styles/global.css';
+import { installTestHook, registerTestTarget } from './testing/hook';
 import type { Services } from './ui/services';
 import { createHintClient } from './workers/hint-client';
 
 if (import.meta.env.MODE === 'e2e') installTestHook();
 
+// First, so errors during bootstrap are caught and held until a reporter exists (FR-37).
+installErrorHandlers();
+
 const root = document.getElementById('app');
 if (!root) throw new Error('#app not found');
 
-/** Bootstrap order: docs/architecture/05 §13. Later issues add error handlers, remote config and flags. */
+/** Bootstrap order: docs/architecture/05 §13. */
 async function bootstrap(): Promise<void> {
-  const save = createSaveStore();
+  const backend = idbBackend();
+  const save = createSaveStore(backend);
   const initialProfile = await save.loadProfile();
   const params = new URLSearchParams(location.search);
   let profile: Profile = initialProfile;
@@ -36,20 +49,81 @@ async function bootstrap(): Promise<void> {
   document.documentElement.lang = i18n.locale;
   document.documentElement.dir = i18n.dir;
 
-  const content = await loadContent();
-  const audio = createAudioEngine({ enabled: profile.settings.sound });
+  const fallbackConfig = defaultConfig as unknown as RemoteConfig;
+  const [content, remoteConfig] = await Promise.all([
+    loadContent(),
+    loadRemoteConfig({ backend, fallback: fallbackConfig }),
+  ]);
 
-  const profileStore = createStore<Profile>(profile, (next) => void save.saveProfile(next));
-  const progressStore = createStore<Progress>(progress, (next) => void save.saveProgress(next));
+  const profileStore = createStore<Profile>(
+    profile,
+    (next) => void save.saveProfile(next).catch(reportError),
+  );
+  const progressStore = createStore<Progress>(
+    progress,
+    (next) => void save.saveProgress(next).catch(reportError),
+  );
+  const configStore = createStore(remoteConfig);
+  const flagsStore = createStore<ResolvedFlags>(resolveFlags(remoteConfig, profile.deviceId));
+
+  // Testers are excluded at the source in production. Until a vendor adapter exists (DEC-7), production sends nothing.
+  const memory =
+    import.meta.env.MODE === 'e2e' && params.get('analytics') === 'memory' ? createMemoryAdapter() : null;
+  const adapter =
+    memory ??
+    (profile.tester
+      ? createNullAdapter()
+      : import.meta.env.DEV
+        ? createConsoleAdapter()
+        : createNullAdapter());
+  const analytics = createAnalytics({ adapter, profile: profileStore, backend, appVersion: __APP_VERSION__ });
+  await analytics.init();
+  setErrorReporter(createAnalyticsErrorReporter(analytics));
+  if (memory) registerTestTarget({ events: () => memory.events() });
+  if (params.get('debug') === 'throw') setTimeout(() => reportError(new Error('clink test error')), 1000);
+
+  const audio = createAudioEngine({ enabled: profile.settings.sound });
+  audio.onStatusChange((state) => {
+    analytics.track('audio_state', { state, sound_on: profileStore.get().settings.sound });
+  });
+
+  // Sessions start on launch and after 30 minutes idle; flags are resolved once per session (D27, FR-39).
+  const startSession = (): void => {
+    const current = profileStore.get();
+    flagsStore.set(resolveFlags(configStore.get(), current.deviceId));
+    analytics.startSession({
+      platform: platformOf(navigator.userAgent, navigator.maxTouchPoints),
+      browser: browserOf(navigator.userAgent),
+      installed:
+        matchMedia('(display-mode: standalone)').matches ||
+        (navigator as Navigator & { standalone?: boolean }).standalone === true,
+      locale: i18n.locale,
+      sound_on: current.settings.sound,
+      app_version: __APP_VERSION__,
+      ab_flags: flagsStore.get().assignments,
+      source: current.source,
+      tester: current.tester,
+    });
+  };
+  startSession();
+  setInterval(() => void analytics.flush(), 10_000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') void analytics.flush();
+    else if (shouldStartSession(profileStore.get().lastActiveAt, Date.now())) startSession();
+  });
+  window.addEventListener('pagehide', () => void analytics.flush());
+  document.addEventListener('pointerdown', () => analytics.touch(), { capture: true });
+  startConfigRefresh(configStore, { backend, fallback: fallbackConfig });
+
   const services: Services = {
     save,
     audio,
-    analytics: createConsoleAnalytics(),
+    analytics,
     i18n: createStore(i18n),
     content,
     hints: createHintClient(),
-    config: createStore(defaultConfig as RemoteConfig),
-    flags: createStore<ResolvedFlags>({ assignments: {}, flags: {} }),
+    config: configStore,
+    flags: flagsStore,
     profile: profileStore,
     progress: progressStore,
   };

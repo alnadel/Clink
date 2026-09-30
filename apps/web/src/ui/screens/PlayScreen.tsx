@@ -6,8 +6,11 @@ import { computeLayout } from '../../board/layout';
 import { createBoardView } from '../../board/pixi/board-view';
 import type { BoardOptions, BoardView } from '../../board/types';
 import { createPlayController, type PlayController, type PlayTarget } from '../../game/play-controller';
+import { levelStatuses } from '../../game/unlocks';
+import { setCurrentLevelId } from '../../ops/errors';
 import { resolveReducedMotion, systemPrefersReducedMotion } from '../../platform/motion';
 import { registerTestTarget } from '../../testing/hook';
+import { GuideBanner } from '../components/GuideBanner';
 import { Hud } from '../components/Hud';
 import { SolveCard } from '../components/SolveCard';
 import { showToast } from '../components/Toast';
@@ -34,15 +37,28 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
   const latest = useRef({ play, services });
   latest.current = { play, services };
   const profile = useStore(services.profile);
+  const progressNow = useStore(services.progress);
+  const disabled = useStore(services.config).disabledLevels;
+  const locked =
+    play.kind === 'campaign' &&
+    levelStatuses(services.content.manifest().levelOrder, new Set(disabled), progressNow).get(
+      play.levelId,
+    ) === 'locked';
   const view = useStore(controller?.view ?? null);
 
   useEffect(() => {
+    if (locked) {
+      location.route('/map', true);
+      return;
+    }
     const container = host.current;
     if (!container) return;
     const board = createBoardView();
     boardRef.current = board;
     let disposed = false;
     let created: PlayController | null = null;
+    // Tests read the board only once Pixi has mounted, so a tap can never hit an empty container.
+    let boardReady = false;
 
     const { play: current, services: svc } = latest.current;
     const ctl = createPlayController(svc, board, current, {
@@ -52,16 +68,18 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
     created = ctl;
     void board.mount(container, ctl.board).then(() => {
       if (disposed) return;
+      boardReady = true;
       // The controller shows the level once it has loaded; a mount that finishes later still gets it.
       setController(ctl);
     });
 
+    setCurrentLevelId(current.levelId);
     const observer = new ResizeObserver(() => board.resize());
     observer.observe(container);
 
     if (import.meta.env.MODE === 'e2e') {
       registerTestTarget({
-        snapshot: () => ctl.snapshot(),
+        snapshot: () => (boardReady ? ctl.snapshot() : null),
         glassCenter: (index) => centerOf(container, ctl, index),
         melodyCenter: () => {
           const level = ctl.level();
@@ -88,12 +106,13 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
       disposed = true;
       observer.disconnect();
       created?.dispose();
+      setCurrentLevelId(null);
       board.destroy();
       boardRef.current = null;
       setController(null);
     };
     // Only the level's identity recreates the board; everything else is read through `latest`.
-  }, [targetKey]);
+  }, [targetKey, locked]);
 
   const { labels, reducedMotion } = profile.settings;
   useEffect(() => {
@@ -124,6 +143,7 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
         onRestart={() => controller?.restart()}
         onHint={() => void controller?.hint()}
       />
+      <GuideBanner textKey={view?.guideTextKey ?? null} />
       <div class="board-host" ref={host} data-testid="board" />
       {view?.status === 'missing' ? <p class="muted center">{t('play.notFound')}</p> : null}
       {view?.songActive ? (

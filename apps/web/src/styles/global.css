@@ -226,3 +226,63 @@ a {
   letter-spacing: 0.2em;
   color: #fde047;
 }
+
+.home-nav {
+  padding-block-start: 24px;
+}
+
+.world h2 {
+  margin-block: 20px 8px;
+  font-size: 1.05rem;
+}
+
+.world-locked {
+  opacity: 0.55;
+}
+
+.level-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 10px;
+}
+
+.level-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 56px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--fg);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.level-node.open {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.level-node.locked {
+  opacity: 0.6;
+}
+
+.level-node small {
+  color: #fde047;
+  font-size: 0.7rem;
+}
+
+.guide-banner {
+  margin: 0;
+  padding-block: 10px;
+  padding-inline: 16px;
+  text-align: center;
+  font-weight: 600;
+  background: var(--surface);
+  border-radius: var(--radius);
+  margin-inline: 12px;
+}

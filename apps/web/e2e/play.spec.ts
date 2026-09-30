@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
+import { pour, tapGlass, waitForBoard } from './helpers';
 
 /** Appendix A: C into B, B into A, A into C, B into A, C into B (glass indices 2>1, 1>0, 0>2, 1>0, 2>1). */
 const APPENDIX_A: [number, number][] = [
@@ -13,19 +14,7 @@ async function open(page: Page, path = '/play/w1-08') {
   await page.goto('/');
   await page.getByRole('button', { name: 'Play muted' }).click();
   await page.goto(path);
-  await page.waitForFunction(() => window.__clink?.snapshot?.() != null);
-}
-
-async function tapGlass(page: Page, index: number) {
-  const point = await page.evaluate((i) => window.__clink?.glassCenter?.(i), index);
-  if (!point) throw new Error('no board yet');
-  await page.mouse.click(point.x, point.y);
-}
-
-async function pour(page: Page, from: number, to: number, expectMoves: number) {
-  await tapGlass(page, from);
-  await tapGlass(page, to);
-  await page.waitForFunction((n) => window.__clink?.snapshot?.()?.moves === n, expectMoves);
+  await waitForBoard(page);
 }
 
 const snapshot = (page: Page) => page.evaluate(() => window.__clink?.snapshot?.());
@@ -59,7 +48,7 @@ test('closing the tab mid-level and reopening resumes the same state (FR-32)', a
   await pour(page, 2, 1, 1);
   await pour(page, 1, 0, 2);
   await page.reload();
-  await page.waitForFunction(() => window.__clink?.snapshot?.() != null);
+  await waitForBoard(page);
   expect(await snapshot(page)).toMatchObject({ moves: 2, state: { water: [4, 1, 4] } });
 });
 

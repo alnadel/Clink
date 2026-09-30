@@ -34,8 +34,11 @@ export async function loadContent(options: LoadContentOptions = {}): Promise<Con
         if (!res.ok) throw new Error(`pack ${file}: HTTP ${res.status}`);
         return (await res.json()) as PackFile;
       });
-      // A failed load may be retried.
-      load.catch(() => packLoads.delete(file));
+      // A failed load is reported, and may be retried.
+      load.catch((error: unknown) => {
+        reportError(error);
+        packLoads.delete(file);
+      });
       packLoads.set(file, load);
     }
     return load;
