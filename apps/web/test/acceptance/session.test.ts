@@ -9,7 +9,7 @@ const w108 = () => compileLevel(w108Json());
 const pour = (from: number, to: number): Move => ({ type: 'pour', from, to });
 const APPENDIX_A: Move[] = [pour(2, 1), pour(1, 0), pour(0, 2), pour(1, 0), pour(2, 1)];
 
-describe.skip('game session: tapping glasses (rules 6 and 7)', () => {
+describe('game session: tapping glasses (rules 6 and 7)', () => {
   it('starts at the level start', () => {
     const s = createGameSession(w108()).snapshot();
     expect(s).toEqual({
@@ -88,7 +88,7 @@ describe.skip('game session: tapping glasses (rules 6 and 7)', () => {
   });
 });
 
-describe.skip('game session: undo and restart (rule 13)', () => {
+describe('game session: undo and restart (rule 13)', () => {
   it('undo steps back one move and takes it off the count', () => {
     const session = createGameSession(w108());
     session.tapGlass(2);
@@ -130,7 +130,7 @@ describe.skip('game session: undo and restart (rule 13)', () => {
   });
 });
 
-describe.skip('game session: solving (rule 11)', () => {
+describe('game session: solving (rule 11)', () => {
   it('Appendix A tunes on move 5, emits tuned last, then locks the board', () => {
     const session = createGameSession(w108(), { resumeMoves: APPENDIX_A.slice(0, 4) });
     session.tapGlass(2);
@@ -168,7 +168,7 @@ describe.skip('game session: solving (rule 11)', () => {
   });
 });
 
-describe.skip('game session: faucet and sink (rule 8, decision D9)', () => {
+describe('game session: faucet and sink (rule 8, decision D9)', () => {
   it('a tool with no glass selected asks for a selection and costs nothing', () => {
     const session = createGameSession(compileLevel(fxToolsJson()));
     expect(session.tapTool('faucet')).toEqual([{ type: 'need-selection', tool: 'faucet' }]);
