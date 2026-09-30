@@ -6,7 +6,12 @@ import { createAudioEngine } from './audio/engine';
 import { loadContent } from './content/store';
 import { createI18n } from './i18n/i18n';
 import { createStore } from './lib/store';
-import { createConsoleAdapter, createMemoryAdapter, createNullAdapter } from './ops/adapters';
+import {
+  createConsoleAdapter,
+  createHttpAdapter,
+  createMemoryAdapter,
+  createNullAdapter,
+} from './ops/adapters';
 import { createAnalytics } from './ops/analytics';
 import { loadRemoteConfig, startConfigRefresh } from './ops/config';
 import {
@@ -24,6 +29,7 @@ import { createHaptics } from './platform/haptics';
 import { captureInstallPrompt } from './platform/install';
 import { registerServiceWorker } from './platform/sw';
 import { installTestHook, registerTestTarget } from './testing/hook';
+import { unlockProgress } from './testing/unlock';
 import { showToast } from './ui/components/Toast';
 import type { Services } from './ui/services';
 import { createHintClient } from './workers/hint-client';
@@ -67,10 +73,16 @@ async function bootstrap(): Promise<void> {
     progress,
     (next) => void save.saveProgress(next).catch(reportError),
   );
+  // End-to-end builds only: `?unlock=<levelId|all>` skips the levels before it.
+  const unlock = import.meta.env.MODE === 'e2e' ? params.get('unlock') : null;
+  if (unlock) {
+    progressStore.update((p) => unlockProgress(p, content.manifest().levelOrder, unlock));
+  }
   const configStore = createStore(remoteConfig);
   const flagsStore = createStore<ResolvedFlags>(resolveFlags(remoteConfig, profile.deviceId));
 
-  // Testers are excluded at the source in production. Until a vendor adapter exists (DEC-7), production sends nothing.
+  // Testers are excluded at the source in production. Without a collector address (DEC-7), production sends nothing.
+  const collector = import.meta.env.VITE_ANALYTICS_URL;
   const memory =
     import.meta.env.MODE === 'e2e' && params.get('analytics') === 'memory' ? createMemoryAdapter() : null;
   const adapter =
@@ -79,7 +91,9 @@ async function bootstrap(): Promise<void> {
       ? createNullAdapter()
       : import.meta.env.DEV
         ? createConsoleAdapter()
-        : createNullAdapter());
+        : collector
+          ? createHttpAdapter(collector)
+          : createNullAdapter());
   const analytics = createAnalytics({ adapter, profile: profileStore, backend, appVersion: __APP_VERSION__ });
   await analytics.init();
   setErrorReporter(createAnalyticsErrorReporter(analytics));

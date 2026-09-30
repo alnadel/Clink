@@ -23,6 +23,7 @@ VitePWA({
     ],
   },
   workbox: {
+    clientsClaim: true, skipWaiting: true,   // a first visit works offline without a reload (FR-35)
     globPatterns: ['**/*.{js,css,html,woff2,svg,png,webp}', 'audio/glass/*', 'audio/sfx/*', 'audio/silence.wav', 'art/w1/**'],
     globIgnores: ['art/w2/**', 'art/w3/**', 'content/**', 'config.json'],
     navigateFallback: '/index.html',

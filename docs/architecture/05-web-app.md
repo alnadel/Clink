@@ -42,7 +42,7 @@ src/
 | `/settings` | `SettingsScreen` | §11 |
 | `/restore` | `RestoreScreen` | Reads the code from `location.hash` (08 §2) |
 | `/privacy` | `PrivacyScreen` | Static text from i18n (NFR-10) |
-| `/dev/level` | `DevLevelScreen` | Only when `import.meta.env.DEV`: paste a LevelJson and play it with solver info |
+| `/dev/level` | `DevLevelScreen` | Only when `import.meta.env.DEV` (lazy-loaded, absent from production builds): paste a LevelJson and play it with solver overlays. English only. |
 
 Paths route through an SPA fallback in production ([07](07-platform.md)).
 
@@ -52,7 +52,7 @@ Paths route through an SPA fallback in production ([07](07-platform.md)).
 
 ```ts
 interface Services {
-  save: SaveStore; audio: AudioEngine; analytics: Analytics; i18n: I18n;
+  save: SaveStore; audio: AudioEngine; analytics: Analytics; i18n: Store<I18n>;
   content: ContentStore; hints: HintClient; config: Store<RemoteConfig>; flags: Store<ResolvedFlags>;
   profile: Store<Profile>; progress: Store<Progress>;
 }

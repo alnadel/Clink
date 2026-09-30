@@ -41,3 +41,22 @@ export function createMemoryAdapter(): MemoryAdapter {
     },
   };
 }
+
+/**
+ * Posts each batch as JSON to a collector the team runs (`{ "events": [...] }`), so analytics work without
+ * choosing a vendor SDK (DEC-7). A non-2xx answer rejects, so the batch stays queued and is retried.
+ */
+export function createHttpAdapter(url: string, fetchImpl: typeof fetch = fetch): AnalyticsAdapter {
+  return {
+    name: 'http',
+    async send(batch) {
+      const response = await fetchImpl(url, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ events: batch }),
+        keepalive: true,
+      });
+      if (!response.ok) throw new Error(`analytics collector answered ${response.status}`);
+    },
+  };
+}

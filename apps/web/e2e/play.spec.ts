@@ -11,7 +11,7 @@ const APPENDIX_A: [number, number][] = [
 ];
 
 async function open(page: Page, path = '/play/w1-08') {
-  await page.goto('/');
+  await page.goto('/?unlock=w1-08');
   await page.getByRole('button', { name: 'Play muted' }).click();
   await page.goto(path);
   await waitForBoard(page);

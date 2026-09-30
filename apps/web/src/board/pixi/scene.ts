@@ -106,7 +106,10 @@ export class BoardScene {
     this.layout = layout;
     this.options = options;
     for (const layer of [this.staticLayer, this.glassLayer]) {
-      for (const child of layer.removeChildren()) child.destroy({ children: true });
+      for (const child of layer.removeChildren()) {
+        // The melody cursor lives across rebuilds; destroying it would break every later setCursor.
+        if (child !== this.cursor) child.destroy({ children: true });
+      }
     }
     this.glasses = [];
     this.chips = [];

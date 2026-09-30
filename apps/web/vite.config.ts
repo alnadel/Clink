@@ -28,6 +28,9 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // A first visit is controlled straight away, so the game works offline without a second load (FR-35).
+        clientsClaim: true,
+        skipWaiting: true,
         globPatterns: [
           '**/*.{js,css,html,woff2,svg,png,webp,wav}',
           'audio/glass/*',

@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
-import { pour, waitForBoard } from './helpers';
+import { expect, test } from '@playwright/test';
+import { continuePlaying, flushed, pour, waitForBoard } from './helpers';
 
 const APPENDIX_A: [number, number][] = [
   [2, 1],
@@ -9,15 +9,10 @@ const APPENDIX_A: [number, number][] = [
   [2, 1],
 ];
 
-async function flushed(page: Page) {
-  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
-  await page.waitForTimeout(200);
-  return page.evaluate(() => window.__clink?.events?.() ?? []);
-}
-
 test('a scripted session sends its events in order (FR-36)', async ({ page }) => {
-  await page.goto('/?analytics=memory');
+  await page.goto('/?analytics=memory&unlock=w1-08');
   await page.getByRole('button', { name: 'Play muted' }).click();
+  await continuePlaying(page);
   await waitForBoard(page);
 
   for (const [i, [from, to]] of APPENDIX_A.entries()) await pour(page, from, to, i + 1);

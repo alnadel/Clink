@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { pour, waitForBoard } from './helpers';
+import { continuePlaying, pour, waitForBoard } from './helpers';
 
 test.use({ serviceWorkers: 'allow' });
 
@@ -12,8 +12,9 @@ const APPENDIX_A: [number, number][] = [
 ];
 
 test('after the first load the game plays with the network off (FR-35)', async ({ page, context }) => {
-  await page.goto('/');
+  await page.goto('/?unlock=w1-08');
   await page.getByRole('button', { name: 'Play muted' }).click();
+  await continuePlaying(page);
   await waitForBoard(page);
   // Wait for the service worker to take control and for every level pack to be cached.
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null, undefined, {

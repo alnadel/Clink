@@ -19,6 +19,9 @@ flush() (every 10 s, on visibilitychange→hidden, on pagehide)
 
 - **Adapters** implement `AnalyticsAdapter`:
   - `ConsoleAdapter` in development and tests: it logs each envelope;
+  - `HttpAdapter`: posts `{ "events": [...] }` to the collector named by the build-time variable
+    `VITE_ANALYTICS_URL` (add its origin to `connect-src` in `public/_headers`). Production uses
+    it when the variable is set and sends nothing otherwise;
   - `GameAnalyticsAdapter` after DEC-7, whose mapping the DEC-7 spike issue settles;
   - `NullAdapter` when `profile.tester` is true in production. Testers are excluded at the
     source, and the events are still logged to the console.
