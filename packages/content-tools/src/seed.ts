@@ -248,6 +248,29 @@ export function seedTunes(contentDir: string): void {
   writeJson(file, tunes);
 }
 
+interface Attempt {
+  tune: string;
+  phrase: string;
+  band: Slot['band'];
+  /** A single quick search (fallbacks are not worth a long one). */
+  quick: boolean;
+}
+
+const EASIER: Record<Slot['band'], Slot['band']> = { hard: 'medium', medium: 'easy', easy: 'easy' };
+
+/** The searches to try for a slot, in order. */
+function alternatives(slot: Slot): Attempt[] {
+  const [tune, phrase] = pick(slot.phrases, 0);
+  const pool = slot.world === 1 ? W1 : slot.world === 2 ? [...W2_PENT, ...W2_MAJOR] : W3;
+  const list: Attempt[] = [{ tune, phrase, band: slot.band, quick: false }];
+  for (const [otherTune, otherPhrase] of pool) {
+    if (otherTune !== tune || otherPhrase !== phrase)
+      list.push({ tune: otherTune, phrase: otherPhrase, band: slot.band, quick: true });
+  }
+  if (EASIER[slot.band] !== slot.band) list.push({ tune, phrase, band: EASIER[slot.band], quick: true });
+  return list;
+}
+
 /** Writes proven levels for every slot that has no file yet. Deterministic. */
 export function seedLevels(options: SeedOptions): void {
   const log = options.log ?? (() => {});
@@ -261,39 +284,46 @@ export function seedLevels(options: SeedOptions): void {
   for (const slot of [...planCampaign(), ...planDaily()]) {
     if (options.only && !options.only.some((prefix) => slot.id.startsWith(prefix))) continue;
     if (existingIds.has(slot.id)) continue;
-    const [tune, phraseId] = pick(slot.phrases, 0);
     const started = Date.now();
-    let candidates: Candidate[] = [];
-    try {
-      for (const attempts of [3000, 12000]) {
-        candidates = generate({
-          contentDir: options.contentDir,
-          tune,
-          phrase: phraseId,
-          world: slot.world,
-          band: slot.band,
-          count: 30,
-          seed: slot.seed,
-          attempts,
-        }).filter(
-          (c) => !used.has(setupKey(c.level)) && (!slot.tools || sameTools(c.level.tools, slot.tools)),
-        );
-        if (candidates.length > 0) break;
+    let chosen: Candidate | undefined;
+    let usedSearch = '';
+    // The planned phrase first; when the generator finds nothing, other phrases of the world, and then
+    // the next easier band, so that every slot ends up with a level.
+    for (const attempt of alternatives(slot)) {
+      let candidates: Candidate[] = [];
+      try {
+        for (const attempts of [3000, 12000]) {
+          candidates = generate({
+            contentDir: options.contentDir,
+            tune: attempt.tune,
+            phrase: attempt.phrase,
+            world: slot.world,
+            band: attempt.band,
+            count: 30,
+            seed: slot.seed,
+            attempts,
+          }).filter(
+            (c) => !used.has(setupKey(c.level)) && (!slot.tools || sameTools(c.level.tools, slot.tools)),
+          );
+          if (candidates.length > 0 || attempt.quick) break;
+        }
+      } catch (error) {
+        log(`${slot.id}: FAILED ${error instanceof Error ? error.message : String(error)}`);
+        continue;
       }
-    } catch (error) {
-      log(`${slot.id}: FAILED ${error instanceof Error ? error.message : String(error)}`);
-      continue;
+      chosen = choose(candidates, { ...slot, band: attempt.band });
+      if (chosen) {
+        usedSearch = `${attempt.tune} ${attempt.band}`;
+        break;
+      }
+      log(`${slot.id}: NO CANDIDATE (${attempt.tune}/${attempt.phrase} world ${slot.world} ${attempt.band})`);
     }
-    const chosen = choose(candidates, slot);
-    if (!chosen) {
-      log(`${slot.id}: NO CANDIDATE (${tune}/${phraseId} world ${slot.world} ${slot.band})`);
-      continue;
-    }
+    if (!chosen) continue;
     used.add(setupKey(chosen.level));
     const dir = slot.kind === 'daily' ? 'daily' : join('levels', `w${slot.world}`);
     writeJson(join(options.contentDir, dir, `${slot.id}.json`), { ...chosen.level, id: slot.id });
     log(
-      `${slot.id}: ${tune} par ${chosen.par} reach ${chosen.reachable} opt ${chosen.optimalSolutions} (${Date.now() - started} ms)`,
+      `${slot.id}: ${usedSearch} par ${chosen.par} reach ${chosen.reachable} opt ${chosen.optimalSolutions} (${Date.now() - started} ms)`,
     );
   }
 }

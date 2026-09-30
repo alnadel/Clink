@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 /** Reads and parses a JSON file. Throws Error(`${path}: ${reason}`) on read or parse failure. */
@@ -13,7 +13,10 @@ export function readJson(path: string): unknown {
 /** Canonical content formatting: JSON.stringify(value, null, 2) + '\n'. Creates parent folders. */
 export function writeJson(path: string, value: unknown): void {
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
+  // Written aside and renamed, so a tool reading the file at the same moment never sees half of it.
+  const temporary = `${path}.${process.pid}.tmp`;
+  writeFileSync(temporary, `${JSON.stringify(value, null, 2)}\n`);
+  renameSync(temporary, path);
 }
 
 /** True when the text is exactly the canonical formatting of its own JSON value. */
