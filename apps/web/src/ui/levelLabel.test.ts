@@ -10,4 +10,8 @@ describe('levelLabel', () => {
   it('leaves other ids alone', () => {
     expect(levelLabel('d004')).toBe('d004');
   });
+
+  it('isolates the number in right-to-left text', () => {
+    expect(levelLabel('w1-12', true)).toBe('\u20661-12\u2069');
+  });
 });

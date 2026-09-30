@@ -16,6 +16,7 @@ What is built, how it was checked, and what only people can supply. Updated as w
 | PWA | Offline play after the first load, hashed immutable level packs, strict CSP and cache headers, size budget (`pnpm size`). |
 | Accessibility | Keyboard play, live region, reduced motion, native form controls, axe checks on every screen. |
 | Tooling | Level workbench at `/dev/level` (development builds only). |
+| Performance | Low-effects mode switches on by itself below 40 fps, `?fps=1` overlay in test builds, size budget, Lighthouse report job in CI (advisory). |
 
 ## Checked
 

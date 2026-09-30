@@ -41,6 +41,7 @@ interface PlayScreenProps {
 export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScreenProps): JSX.Element {
   const services = useServices();
   const t = useT();
+  const i18n = useStore(services.i18n);
   const location = useLocation();
   const host = useRef<HTMLElement>(null);
   const boardRef = useRef<BoardView | null>(null);
@@ -234,7 +235,7 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
   const title =
     play.kind === 'daily'
       ? t('play.daily', { n: play.puzzleNo ?? '' })
-      : t('play.level', { n: levelLabel(play.levelId) });
+      : t('play.level', { n: levelLabel(play.levelId, i18n.dir === 'rtl') });
   const back = play.kind === 'daily' || tutorial ? '/' : '/map';
 
   return (
