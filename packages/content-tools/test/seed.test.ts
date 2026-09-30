@@ -1,6 +1,7 @@
 import { compileLevel, type LevelJson } from '@clink/rules';
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../src/load';
+import { CONTENT_DIR } from '../src/paths';
 import { buildGuides, PHRASES, planCampaign, planDaily } from '../src/seed';
 import { tempContent } from './helpers';
 
@@ -69,7 +70,7 @@ describe('seed plan', () => {
 
 describe('guides', () => {
   it('builds scripts for levels 1-3 and the three mechanic intros', () => {
-    const guides = buildGuides(tempContent());
+    const guides = buildGuides(CONTENT_DIR);
     expect(Object.keys(guides.levels)).toEqual(['w1-01', 'w1-02', 'w1-03']);
     expect(Object.keys(guides.intros).sort()).toEqual(['faucet', 'ice', 'sink']);
   });

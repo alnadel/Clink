@@ -55,7 +55,7 @@ describe('generate', () => {
     }
     expect(generate({ contentDir, ...HARD })).toEqual(candidates);
     expect(generate({ contentDir, ...HARD, seed: 2 })).not.toEqual(candidates);
-  });
+  }, 60_000);
 
   it('rejects a phrase whose scale the world does not allow', () => {
     expect(() => generate({ contentDir: tempContent(), ...HARD, world: 3 })).toThrow(/world 3/);

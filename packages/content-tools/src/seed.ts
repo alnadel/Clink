@@ -292,7 +292,8 @@ export function seedLevels(options: SeedOptions): void {
     for (const attempt of alternatives(slot)) {
       let candidates: Candidate[] = [];
       try {
-        for (const attempts of [3000, 12000]) {
+        // Harder bands rarely have candidates; a long search there costs more than falling back.
+        for (const attempts of attempt.band === 'easy' && !attempt.quick ? [3000, 12000] : [3000]) {
           candidates = generate({
             contentDir: options.contentDir,
             tune: attempt.tune,

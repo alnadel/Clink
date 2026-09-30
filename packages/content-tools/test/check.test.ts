@@ -4,6 +4,7 @@ import type { LevelJson } from '@clink/rules';
 import { describe, expect, it } from 'vitest';
 import { type CheckReport, checkContent } from '../src/check';
 import { readJson, writeJson } from '../src/io';
+import { CONTENT_DIR } from '../src/paths';
 import { tempContent } from './helpers';
 
 const W108 = 'levels/w1/w1-08.json';
@@ -23,15 +24,26 @@ function withLevel(mutate: (level: LevelJson) => void, release = false): CheckRe
 
 describe('checkContent: the real content', () => {
   it('has no errors, only the expected warnings', () => {
-    const report = checkContent({ contentDir: tempContent() });
+    const report = checkContent({ contentDir: CONTENT_DIR });
     expect(codes(report, 'error')).toEqual([]);
-    expect(codes(report, 'warn').sort()).toEqual(['E_MISSING', 'W_WORLD_PHRASE']);
+    // Appendix A has seven notes, and a campaign that is still being written reports what is missing.
+    expect(codes(report, 'warn').filter((code) => code !== 'E_MISSING')).toEqual(['W_WORLD_PHRASE']);
     expect(report.levelsChecked).toBeGreaterThanOrEqual(1);
   });
 
-  it('with --release, missing levels and pending rights are errors', () => {
-    const report = checkContent({ contentDir: tempContent(), release: true });
-    expect(codes(report, 'error').sort()).toEqual(['E_MISSING', 'E_RIGHTS']);
+  it('with --release, pending rights are errors', () => {
+    const report = checkContent({ contentDir: CONTENT_DIR, release: true });
+    const found = new Set(codes(report, 'error'));
+    expect(found.has('E_RIGHTS')).toBe(true);
+    expect([...found].filter((code) => code !== 'E_RIGHTS' && code !== 'E_MISSING')).toEqual([]);
+  });
+});
+
+describe('checkContent: an incomplete campaign', () => {
+  it('reports missing levels: a warning normally, an error for a release', () => {
+    const dir = tempContent();
+    expect(codes(checkContent({ contentDir: dir }), 'warn')).toContain('E_MISSING');
+    expect(codes(checkContent({ contentDir: dir, release: true }), 'error')).toContain('E_MISSING');
   });
 });
 
