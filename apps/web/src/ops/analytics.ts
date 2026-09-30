@@ -41,8 +41,15 @@ export function createAnalytics(deps: AnalyticsDeps): AnalyticsService {
   let flushing: Promise<void> | null = null;
   let lastTouchWrite = 0;
 
+  // Events tracked in the same turn share one write of the queue.
+  let persistQueued = false;
   const persist = (): void => {
-    void deps.backend.set('events', queue).catch(() => {});
+    if (persistQueued) return;
+    persistQueued = true;
+    queueMicrotask(() => {
+      persistQueued = false;
+      void deps.backend.set('events', queue).catch(() => {});
+    });
   };
 
   const doFlush = async (): Promise<void> => {
