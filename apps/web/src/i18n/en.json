@@ -37,5 +37,8 @@
   "solve.skip": "Skip",
   "daily.none": "No puzzle today. Come back tomorrow!",
   "daily.copied": "Result copied",
-  "a11y.moved": "Poured from {from} to {to}. {moves} moves."
+  "a11y.moved": "Poured from {from} to {to}. {moves} moves.",
+  "map.levelSolved": "Level {n}, {stars} stars",
+  "map.levelOpen": "Level {n}",
+  "map.levelLocked": "Level {n}, locked"
 }
