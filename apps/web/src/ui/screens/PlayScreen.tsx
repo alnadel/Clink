@@ -26,6 +26,7 @@ import { SurveyModal } from '../components/SurveyModal';
 import { showToast } from '../components/Toast';
 import { useStore } from '../hooks/useStore';
 import { actionForKey } from '../keyboard';
+import { levelLabel } from '../levelLabel';
 import { type Services, useServices, useT } from '../services';
 import { shareResult } from '../share';
 
@@ -233,7 +234,7 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
   const title =
     play.kind === 'daily'
       ? t('play.daily', { n: play.puzzleNo ?? '' })
-      : t('play.level', { n: play.levelId });
+      : t('play.level', { n: levelLabel(play.levelId) });
   const back = play.kind === 'daily' || tutorial ? '/' : '/map';
 
   return (

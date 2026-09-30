@@ -26,6 +26,9 @@ export function createBoardView(): BoardView {
   let selected: number | null = null;
   let glowGlass: number | null = null;
   let glowPeriod: number | null = null;
+  let guideTarget: Parameters<BoardView['setGuideHighlight']>[0] = null;
+  let hintMove: Move | null = null;
+  let cursorNote: number | null = null;
   let pending: (() => void) | null = null;
   let run: { skip: boolean } | null = null;
   const tweens = new Set<Tween>();
@@ -50,6 +53,10 @@ export function createBoardView(): BoardView {
     scene.build(level, layout, live, found, options);
     scene.setSelected(selected, options.reducedMotion);
     scene.setGlowRect(glowGlass);
+    // A rebuild (resize, options) wipes the overlays, so they are drawn again from the layout that now applies.
+    scene.setGuideTarget(guideTarget);
+    scene.setHint(hintMove);
+    scene.setCursor(cursorNote);
   };
 
   const onPointerDown = (event: FederatedPointerEvent): void => {
@@ -146,15 +153,20 @@ export function createBoardView(): BoardView {
     },
 
     show(nextLevel, state, nextFound, nextOptions) {
+      // Overlays belong to the level being opened. They are cleared now, not when Pixi is ready, so a guide
+      // step or hint set right after this call survives a mount that finishes later.
+      selected = null;
+      glowGlass = null;
+      glowPeriod = null;
+      guideTarget = null;
+      hintMove = null;
+      cursorNote = null;
       const apply = () => {
         snapAll();
         level = nextLevel;
         live = state;
         found = nextFound;
         options = nextOptions;
-        selected = null;
-        glowGlass = null;
-        glowPeriod = null;
         render();
       };
       if (app) apply();
@@ -217,10 +229,12 @@ export function createBoardView(): BoardView {
     },
 
     setMelodyCursor(noteIndex) {
+      cursorNote = noteIndex;
       if (level) scene.setCursor(noteIndex);
     },
 
     showHint(move: Move | null) {
+      hintMove = move;
       if (level) scene.setHint(move);
     },
 
@@ -231,6 +245,7 @@ export function createBoardView(): BoardView {
     },
 
     setGuideHighlight(target: { glass?: number; melody?: boolean; tool?: ToolName } | null) {
+      guideTarget = target;
       if (level) scene.setGuideTarget(target);
     },
 
