@@ -1,0 +1,16 @@
+{
+  "name": "@clink/content-tools",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Node CLIs for level content: check (FR-19), prove, generate (FR-20), build packs (FR-18).",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@clink/rules": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
+  }
+}

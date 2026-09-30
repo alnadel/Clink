@@ -1,0 +1,70 @@
+{
+  "level": "w1-08",
+  "start": {
+    "water": [0, 0, 9],
+    "ringing": ["G4", "C5", "C3"],
+    "found": [false, false, false]
+  },
+  "steps": [
+    {
+      "move": {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      },
+      "units": 5,
+      "water": [0, 5, 4],
+      "ringing": ["G4", "C4", "C4"],
+      "found": [false, false, true],
+      "tuned": false
+    },
+    {
+      "move": {
+        "type": "pour",
+        "from": 1,
+        "to": 0
+      },
+      "units": 4,
+      "water": [4, 1, 4],
+      "ringing": ["A3", "A4", "C4"],
+      "found": [false, false, true],
+      "tuned": false
+    },
+    {
+      "move": {
+        "type": "pour",
+        "from": 0,
+        "to": 2
+      },
+      "units": 4,
+      "water": [0, 1, 8],
+      "ringing": ["G4", "A4", "D3"],
+      "found": [false, false, false],
+      "tuned": false
+    },
+    {
+      "move": {
+        "type": "pour",
+        "from": 1,
+        "to": 0
+      },
+      "units": 1,
+      "water": [1, 0, 8],
+      "ringing": ["E4", "C5", "D3"],
+      "found": [true, false, false],
+      "tuned": false
+    },
+    {
+      "move": {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      },
+      "units": 5,
+      "water": [1, 5, 3],
+      "ringing": ["E4", "C4", "D4"],
+      "found": [true, true, true],
+      "tuned": true
+    }
+  ]
+}

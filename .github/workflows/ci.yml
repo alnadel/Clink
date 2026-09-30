@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Lint and format (Biome)
+        run: pnpm check
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit and acceptance tests
+        run: pnpm test
+      # Added by later issues, in this order:
+      #   - name: Level content check (FR-19)        run: pnpm levels:check
+      #   - name: Coverage gate for @clink/rules     run: pnpm test:coverage
+      - name: Build
+        run: pnpm build

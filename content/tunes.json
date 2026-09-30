@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "tunes": {
+    "twinkle-twinkle-little-star": {
+      "title": "Twinkle Twinkle Little Star",
+      "origin": "French melody \"Ah! vous dirai-je, maman\", 1761",
+      "rights": "pending",
+      "phrases": []
+    },
+    "mary-had-a-little-lamb": {
+      "title": "Mary Had a Little Lamb",
+      "origin": "American nursery rhyme, 1830s",
+      "rights": "pending",
+      "phrases": [
+        {
+          "id": "a-pentatonic-c",
+          "scale": {
+            "name": "C major pentatonic",
+            "tonicHz": 130.81,
+            "stepsCents": [
+              0,
+              200,
+              400,
+              700,
+              900
+            ],
+            "range": [
+              "C3",
+              "A5"
+            ]
+          },
+          "notes": [
+            "E4",
+            "D4",
+            "C4",
+            "D4",
+            "E4",
+            "E4",
+            "E4"
+          ],
+          "beats": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "bpm": 100
+        }
+      ]
+    },
+    "frere-jacques": {
+      "title": "Frère Jacques",
+      "origin": "French round, 18th century",
+      "rights": "pending",
+      "phrases": []
+    },
+    "ode-to-joy": {
+      "title": "Ode to Joy",
+      "origin": "Beethoven, Symphony No. 9, 1824",
+      "rights": "pending",
+      "phrases": []
+    },
+    "brahms-lullaby": {
+      "title": "Brahms' Lullaby",
+      "origin": "Brahms, Wiegenlied Op. 49 No. 4, 1868",
+      "rights": "pending",
+      "phrases": []
+    },
+    "london-bridge": {
+      "title": "London Bridge",
+      "origin": "English nursery rhyme",
+      "rights": "pending",
+      "phrases": []
+    },
+    "row-row-row-your-boat": {
+      "title": "Row Row Row Your Boat",
+      "origin": "American nursery rhyme, 1852",
+      "rights": "pending",
+      "phrases": []
+    },
+    "oh-susanna": {
+      "title": "Oh! Susanna",
+      "origin": "Stephen Foster, 1848",
+      "rights": "pending",
+      "phrases": []
+    },
+    "morning-mood": {
+      "title": "Morning Mood",
+      "origin": "Grieg, Peer Gynt, 1875",
+      "rights": "pending",
+      "phrases": []
+    },
+    "in-the-hall-of-the-mountain-king": {
+      "title": "In the Hall of the Mountain King",
+      "origin": "Grieg, Peer Gynt, 1875",
+      "rights": "pending",
+      "phrases": []
+    },
+    "can-can": {
+      "title": "The Can-Can",
+      "origin": "Offenbach, Orpheus in the Underworld, 1858",
+      "rights": "pending",
+      "phrases": []
+    },
+    "fur-elise": {
+      "title": "Für Elise",
+      "origin": "Beethoven, around 1810",
+      "rights": "pending",
+      "phrases": []
+    },
+    "william-tell-overture-finale": {
+      "title": "William Tell Overture (finale)",
+      "origin": "Rossini, 1829",
+      "rights": "pending",
+      "phrases": []
+    },
+    "greensleeves": {
+      "title": "Greensleeves",
+      "origin": "English folk song, 16th century",
+      "rights": "pending",
+      "phrases": []
+    }
+  }
+}

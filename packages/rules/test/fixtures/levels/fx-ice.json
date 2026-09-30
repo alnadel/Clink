@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "fx-ice",
+  "world": 3,
+  "scale": {
+    "name": "C major",
+    "tonicHz": 130.81,
+    "stepsCents": [0, 200, 400, 500, 700, 900, 1100],
+    "range": ["C3", "A5"]
+  },
+  "melody": {
+    "tuneId": "test-tune",
+    "title": "Test Tune",
+    "notes": ["B3", "B4", "B3"],
+    "beats": [1, 1, 1],
+    "bpm": 100
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 5,
+      "emptyNote": "G5",
+      "water": 3
+    },
+    {
+      "id": "B",
+      "capacity": 6,
+      "emptyNote": "D4",
+      "water": 0
+    },
+    {
+      "id": "C",
+      "capacity": 5,
+      "emptyNote": "B4",
+      "water": 1
+    }
+  ],
+  "tools": [],
+  "ice": [
+    {
+      "glass": "A",
+      "countdown": 1
+    },
+    {
+      "glass": "A",
+      "countdown": 4
+    }
+  ],
+  "par": 4,
+  "optimalSolutions": 1
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "disabledLevels": [],
+  "dailyOverrides": {},
+  "experiments": {
+    "stars": {
+      "variants": {
+        "control": {
+          "twoStarFactor": 1.5
+        }
+      },
+      "weights": {
+        "control": 100
+      }
+    }
+  },
+  "refreshMinutes": 30
+}

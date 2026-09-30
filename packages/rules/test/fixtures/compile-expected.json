@@ -1,0 +1,89 @@
+{
+  "w1-08": {
+    "positions": ["C3", "D3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5", "D5", "E5", "G5", "A5"],
+    "firstHz": 130.81,
+    "lastHz": 879.9813,
+    "emptyPos": [8, 10, 9],
+    "targets": [7, 6, 5],
+    "targetIndex": [0, 1, 2, 1, 0, 0, 0],
+    "iceGlass": []
+  },
+  "fx-tools": {
+    "positions": ["C3", "D3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5", "D5", "E5", "G5", "A5"],
+    "firstHz": 130.81,
+    "lastHz": 879.9813,
+    "emptyPos": [12, 13, 10],
+    "targets": [10, 7],
+    "targetIndex": [0, 1, 0],
+    "iceGlass": []
+  },
+  "fx-sink": {
+    "positions": ["C3", "D3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5", "D5", "E5", "G5", "A5"],
+    "firstHz": 130.81,
+    "lastHz": 879.9813,
+    "emptyPos": [10, 11, 13],
+    "targets": [12, 9, 11],
+    "targetIndex": [0, 1, 2, 0],
+    "iceGlass": []
+  },
+  "fx-ice": {
+    "positions": [
+      "C3",
+      "D3",
+      "E3",
+      "F3",
+      "G3",
+      "A3",
+      "B3",
+      "C4",
+      "D4",
+      "E4",
+      "F4",
+      "G4",
+      "A4",
+      "B4",
+      "C5",
+      "D5",
+      "E5",
+      "F5",
+      "G5",
+      "A5"
+    ],
+    "firstHz": 130.81,
+    "lastHz": 879.9813,
+    "emptyPos": [18, 8, 13],
+    "targets": [6, 13],
+    "targetIndex": [0, 1, 0],
+    "iceGlass": [0, 0]
+  },
+  "fx-ice-2": {
+    "positions": [
+      "C3",
+      "D3",
+      "E3",
+      "F3",
+      "G3",
+      "A3",
+      "B3",
+      "C4",
+      "D4",
+      "E4",
+      "F4",
+      "G4",
+      "A4",
+      "B4",
+      "C5",
+      "D5",
+      "E5",
+      "F5",
+      "G5",
+      "A5"
+    ],
+    "firstHz": 130.81,
+    "lastHz": 879.9813,
+    "emptyPos": [5, 18, 13],
+    "targets": [3, 11],
+    "targetIndex": [0, 1, 0],
+    "iceGlass": [1, 0]
+  }
+}

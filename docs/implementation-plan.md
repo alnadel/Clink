@@ -3,6 +3,10 @@
 Source: *Clink: Business Requirements Document (Web MVP)*, 30 Sep 2026 (the BRD).
 Status: draft for the product owner, designer and developers to review in week 0.
 
+> The technical detail in sections 3 and 4 is superseded by the exact specification in
+> [architecture/](architecture/README.md). The rule gaps G1–G8 below are pinned there as
+> decisions D1–D8 ([architecture/01-decisions.md](architecture/01-decisions.md)).
+
 This plan turns the BRD into a build: the architecture, the order of work, who does what
 before each gate, and how every requirement gets verified. It uses the BRD's IDs (rules
 1–17, FR-01–39, NFR-01–14, DEC-1–7, R1–R12) and does not restate the BRD itself.

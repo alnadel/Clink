@@ -1,0 +1,167 @@
+{
+  "w1-08": {
+    "reachable": 18,
+    "par": 5,
+    "optimalSolutions": 1,
+    "truncated": false,
+    "unsolvableStates": 0,
+    "solutionPath": [
+      {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      },
+      {
+        "type": "pour",
+        "from": 1,
+        "to": 0
+      },
+      {
+        "type": "pour",
+        "from": 0,
+        "to": 2
+      },
+      {
+        "type": "pour",
+        "from": 1,
+        "to": 0
+      },
+      {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      }
+    ]
+  },
+  "fx-tools": {
+    "reachable": 114,
+    "par": 6,
+    "optimalSolutions": 1,
+    "truncated": false,
+    "unsolvableStates": 0,
+    "solutionPath": [
+      {
+        "type": "sink",
+        "glass": 1
+      },
+      {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      },
+      {
+        "type": "faucet",
+        "glass": 2
+      },
+      {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      },
+      {
+        "type": "sink",
+        "glass": 1
+      },
+      {
+        "type": "pour",
+        "from": 0,
+        "to": 1
+      }
+    ]
+  },
+  "fx-sink": {
+    "reachable": 113,
+    "par": 6,
+    "optimalSolutions": 1,
+    "truncated": false,
+    "unsolvableStates": 42,
+    "solutionPath": [
+      {
+        "type": "sink",
+        "glass": 0
+      },
+      {
+        "type": "pour",
+        "from": 2,
+        "to": 0
+      },
+      {
+        "type": "pour",
+        "from": 1,
+        "to": 0
+      },
+      {
+        "type": "pour",
+        "from": 0,
+        "to": 2
+      },
+      {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      },
+      {
+        "type": "sink",
+        "glass": 1
+      }
+    ]
+  },
+  "fx-ice": {
+    "reachable": 51,
+    "par": 4,
+    "optimalSolutions": 1,
+    "truncated": false,
+    "unsolvableStates": 20,
+    "solutionPath": [
+      {
+        "type": "pour",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "type": "pour",
+        "from": 0,
+        "to": 2
+      },
+      {
+        "type": "pour",
+        "from": 1,
+        "to": 0
+      },
+      {
+        "type": "pour",
+        "from": 2,
+        "to": 1
+      }
+    ]
+  },
+  "fx-ice-2": {
+    "reachable": 18,
+    "par": 4,
+    "optimalSolutions": 2,
+    "truncated": false,
+    "unsolvableStates": 9,
+    "solutionPath": [
+      {
+        "type": "pour",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "type": "pour",
+        "from": 1,
+        "to": 2
+      },
+      {
+        "type": "pour",
+        "from": 0,
+        "to": 1
+      },
+      {
+        "type": "pour",
+        "from": 1,
+        "to": 0
+      }
+    ]
+  }
+}

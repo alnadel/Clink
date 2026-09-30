@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "fx-tools",
+  "world": 2,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [0, 200, 400, 700, 900],
+    "range": ["C3", "A5"]
+  },
+  "melody": {
+    "tuneId": "test-tune",
+    "title": "Test Tune",
+    "notes": ["C5", "E4", "C5"],
+    "beats": [1, 1, 1],
+    "bpm": 100
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 4,
+      "emptyNote": "E5",
+      "water": 3
+    },
+    {
+      "id": "B",
+      "capacity": 5,
+      "emptyNote": "G5",
+      "water": 5
+    },
+    {
+      "id": "C",
+      "capacity": 4,
+      "emptyNote": "C5",
+      "water": 4
+    }
+  ],
+  "tools": ["faucet", "sink"],
+  "ice": [],
+  "par": 6,
+  "optimalSolutions": 1
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "w1-08",
+  "world": 1,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [0, 200, 400, 700, 900],
+    "range": ["C3", "A5"]
+  },
+  "melody": {
+    "tuneId": "mary-had-a-little-lamb",
+    "title": "Mary Had a Little Lamb",
+    "notes": ["E4", "D4", "C4", "D4", "E4", "E4", "E4"],
+    "beats": [1, 1, 1, 1, 1, 1, 2],
+    "bpm": 100
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 4,
+      "emptyNote": "G4",
+      "water": 0
+    },
+    {
+      "id": "B",
+      "capacity": 5,
+      "emptyNote": "C5",
+      "water": 0
+    },
+    {
+      "id": "C",
+      "capacity": 9,
+      "emptyNote": "A4",
+      "water": 9
+    }
+  ],
+  "tools": [],
+  "ice": [],
+  "par": 5,
+  "optimalSolutions": 1
+}

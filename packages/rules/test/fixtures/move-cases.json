@@ -1,0 +1,774 @@
+[
+  {
+    "name": "pour stops when the target is full (Appendix A move 1)",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 0, 9],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 1
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [0, 5, 4],
+        "ice": []
+      },
+      "units": 5,
+      "events": [
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 1,
+          "toPos": 9
+        },
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 2,
+          "toPos": 8
+        },
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 3,
+          "toPos": 7
+        },
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 4,
+          "toPos": 6
+        },
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 5,
+          "toPos": 5
+        }
+      ]
+    }
+  },
+  {
+    "name": "pour stops when the target is full (Appendix A move 2)",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 5, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 1,
+      "to": 0
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [4, 1, 4],
+        "ice": []
+      },
+      "units": 4,
+      "events": [
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 0,
+          "fromPos": 6,
+          "toPos": 7
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 0,
+          "fromPos": 7,
+          "toPos": 6
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 0,
+          "fromPos": 8,
+          "toPos": 5
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 0,
+          "fromPos": 9,
+          "toPos": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "pour stops when the source is empty (Appendix A move 4)",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 1, 8],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 1,
+      "to": 0
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [1, 0, 8],
+        "ice": []
+      },
+      "units": 1,
+      "events": [
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 0,
+          "fromPos": 10,
+          "toPos": 7
+        }
+      ]
+    }
+  },
+  {
+    "name": "pour from an empty glass is refused",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 0, 9],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 0,
+      "to": 1
+    },
+    "expected": {
+      "ok": false,
+      "reason": "empty"
+    }
+  },
+  {
+    "name": "pour into a full glass is refused",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 5, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 1
+    },
+    "expected": {
+      "ok": false,
+      "reason": "full"
+    }
+  },
+  {
+    "name": "pour into the same glass is refused",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 0, 9],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 2
+    },
+    "expected": {
+      "ok": false,
+      "reason": "same-glass"
+    }
+  },
+  {
+    "name": "empty source wins over full target",
+    "level": "w1-08",
+    "state": {
+      "water": [4, 5, 0],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 0
+    },
+    "expected": {
+      "ok": false,
+      "reason": "empty"
+    }
+  },
+  {
+    "name": "glass index out of range is refused",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 0, 9],
+      "ice": []
+    },
+    "move": {
+      "type": "pour",
+      "from": 0,
+      "to": 3
+    },
+    "expected": {
+      "ok": false,
+      "reason": "bad-glass"
+    }
+  },
+  {
+    "name": "negative glass index is refused",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 0, 9],
+      "ice": []
+    },
+    "move": {
+      "type": "faucet",
+      "glass": -1
+    },
+    "expected": {
+      "ok": false,
+      "reason": "bad-glass"
+    }
+  },
+  {
+    "name": "faucet in a level without a faucet is refused",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 0, 9],
+      "ice": []
+    },
+    "move": {
+      "type": "faucet",
+      "glass": 0
+    },
+    "expected": {
+      "ok": false,
+      "reason": "no-tool"
+    }
+  },
+  {
+    "name": "sink in a level without a sink is refused",
+    "level": "w1-08",
+    "state": {
+      "water": [0, 0, 9],
+      "ice": []
+    },
+    "move": {
+      "type": "sink",
+      "glass": 2
+    },
+    "expected": {
+      "ok": false,
+      "reason": "no-tool"
+    }
+  },
+  {
+    "name": "faucet fills a glass to the brim",
+    "level": "fx-tools",
+    "state": {
+      "water": [3, 5, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "faucet",
+      "glass": 0
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [4, 5, 4],
+        "ice": []
+      },
+      "units": 1,
+      "events": [
+        {
+          "type": "unit",
+          "from": null,
+          "to": 0,
+          "fromPos": null,
+          "toPos": 8
+        }
+      ]
+    }
+  },
+  {
+    "name": "faucet fills an empty glass unit by unit",
+    "level": "fx-tools",
+    "state": {
+      "water": [0, 5, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "faucet",
+      "glass": 0
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [4, 5, 4],
+        "ice": []
+      },
+      "units": 4,
+      "events": [
+        {
+          "type": "unit",
+          "from": null,
+          "to": 0,
+          "fromPos": null,
+          "toPos": 11
+        },
+        {
+          "type": "unit",
+          "from": null,
+          "to": 0,
+          "fromPos": null,
+          "toPos": 10
+        },
+        {
+          "type": "unit",
+          "from": null,
+          "to": 0,
+          "fromPos": null,
+          "toPos": 9
+        },
+        {
+          "type": "unit",
+          "from": null,
+          "to": 0,
+          "fromPos": null,
+          "toPos": 8
+        }
+      ]
+    }
+  },
+  {
+    "name": "faucet on a full glass is refused",
+    "level": "fx-tools",
+    "state": {
+      "water": [3, 5, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "faucet",
+      "glass": 1
+    },
+    "expected": {
+      "ok": false,
+      "reason": "full"
+    }
+  },
+  {
+    "name": "sink empties a glass unit by unit",
+    "level": "fx-tools",
+    "state": {
+      "water": [3, 5, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "sink",
+      "glass": 1
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [3, 0, 4],
+        "ice": []
+      },
+      "units": 5,
+      "events": [
+        {
+          "type": "unit",
+          "from": 1,
+          "to": null,
+          "fromPos": 9,
+          "toPos": null
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": null,
+          "fromPos": 10,
+          "toPos": null
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": null,
+          "fromPos": 11,
+          "toPos": null
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": null,
+          "fromPos": 12,
+          "toPos": null
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": null,
+          "fromPos": 13,
+          "toPos": null
+        }
+      ]
+    }
+  },
+  {
+    "name": "sink on an empty glass is refused",
+    "level": "fx-tools",
+    "state": {
+      "water": [3, 0, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "sink",
+      "glass": 1
+    },
+    "expected": {
+      "ok": false,
+      "reason": "empty"
+    }
+  },
+  {
+    "name": "faucet in a sink-only level is refused",
+    "level": "fx-sink",
+    "state": {
+      "water": [5, 4, 4],
+      "ice": []
+    },
+    "move": {
+      "type": "faucet",
+      "glass": 1
+    },
+    "expected": {
+      "ok": false,
+      "reason": "no-tool"
+    }
+  },
+  {
+    "name": "a countdown of 1 melts after the move and adds a unit",
+    "level": "fx-ice",
+    "state": {
+      "water": [3, 0, 1],
+      "ice": [1, 4]
+    },
+    "move": {
+      "type": "pour",
+      "from": 0,
+      "to": 1
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [1, 3, 1],
+        "ice": [0, 3]
+      },
+      "units": 3,
+      "events": [
+        {
+          "type": "unit",
+          "from": 0,
+          "to": 1,
+          "fromPos": 16,
+          "toPos": 7
+        },
+        {
+          "type": "unit",
+          "from": 0,
+          "to": 1,
+          "fromPos": 17,
+          "toPos": 6
+        },
+        {
+          "type": "unit",
+          "from": 0,
+          "to": 1,
+          "fromPos": 18,
+          "toPos": 5
+        },
+        {
+          "type": "melt",
+          "cube": 0,
+          "glass": 0,
+          "pos": 17
+        }
+      ]
+    }
+  },
+  {
+    "name": "countdowns tick down on every move",
+    "level": "fx-ice",
+    "state": {
+      "water": [2, 3, 1],
+      "ice": [0, 4]
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 1
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [2, 4, 0],
+        "ice": [0, 3]
+      },
+      "units": 1,
+      "events": [
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 13,
+          "toPos": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "a melted cube stays at 0 while another melts",
+    "level": "fx-ice",
+    "state": {
+      "water": [2, 3, 1],
+      "ice": [0, 1]
+    },
+    "move": {
+      "type": "pour",
+      "from": 1,
+      "to": 2
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [3, 0, 4],
+        "ice": [0, 0]
+      },
+      "units": 3,
+      "events": [
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 2,
+          "fromPos": 6,
+          "toPos": 11
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 2,
+          "fromPos": 7,
+          "toPos": 10
+        },
+        {
+          "type": "unit",
+          "from": 1,
+          "to": 2,
+          "fromPos": 8,
+          "toPos": 9
+        },
+        {
+          "type": "melt",
+          "cube": 1,
+          "glass": 0,
+          "pos": 15
+        }
+      ]
+    }
+  },
+  {
+    "name": "a cube melting into a full glass spills",
+    "level": "fx-ice",
+    "state": {
+      "water": [5, 0, 1],
+      "ice": [1, 4]
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 1
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [5, 1, 0],
+        "ice": [0, 3]
+      },
+      "units": 1,
+      "events": [
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 13,
+          "toPos": 7
+        },
+        {
+          "type": "spill",
+          "cube": 0,
+          "glass": 0
+        }
+      ]
+    }
+  },
+  {
+    "name": "two cubes melting in one move: first fills the glass, second spills",
+    "level": "fx-ice",
+    "state": {
+      "water": [4, 0, 1],
+      "ice": [1, 1]
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 1
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [5, 1, 0],
+        "ice": [0, 0]
+      },
+      "units": 1,
+      "events": [
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 1,
+          "fromPos": 13,
+          "toPos": 7
+        },
+        {
+          "type": "melt",
+          "cube": 0,
+          "glass": 0,
+          "pos": 13
+        },
+        {
+          "type": "spill",
+          "cube": 1,
+          "glass": 0
+        }
+      ]
+    }
+  },
+  {
+    "name": "ice stays put when its glass is poured out",
+    "level": "fx-ice",
+    "state": {
+      "water": [3, 0, 1],
+      "ice": [2, 4]
+    },
+    "move": {
+      "type": "pour",
+      "from": 0,
+      "to": 1
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [0, 3, 1],
+        "ice": [1, 3]
+      },
+      "units": 3,
+      "events": [
+        {
+          "type": "unit",
+          "from": 0,
+          "to": 1,
+          "fromPos": 16,
+          "toPos": 7
+        },
+        {
+          "type": "unit",
+          "from": 0,
+          "to": 1,
+          "fromPos": 17,
+          "toPos": 6
+        },
+        {
+          "type": "unit",
+          "from": 0,
+          "to": 1,
+          "fromPos": 18,
+          "toPos": 5
+        }
+      ]
+    }
+  },
+  {
+    "name": "cubes in different glasses melt in cube order",
+    "level": "fx-ice-2",
+    "state": {
+      "water": [0, 0, 2],
+      "ice": [1, 1]
+    },
+    "move": {
+      "type": "pour",
+      "from": 2,
+      "to": 0
+    },
+    "expected": {
+      "ok": true,
+      "state": {
+        "water": [3, 1, 0],
+        "ice": [0, 0]
+      },
+      "units": 2,
+      "events": [
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 0,
+          "fromPos": 12,
+          "toPos": 4
+        },
+        {
+          "type": "unit",
+          "from": 2,
+          "to": 0,
+          "fromPos": 13,
+          "toPos": 3
+        },
+        {
+          "type": "melt",
+          "cube": 0,
+          "glass": 1,
+          "pos": 17
+        },
+        {
+          "type": "melt",
+          "cube": 1,
+          "glass": 0,
+          "pos": 2
+        }
+      ]
+    }
+  },
+  {
+    "name": "refused moves do not tick countdowns (no state returned)",
+    "level": "fx-ice",
+    "state": {
+      "water": [3, 0, 1],
+      "ice": [1, 4]
+    },
+    "move": {
+      "type": "pour",
+      "from": 1,
+      "to": 2
+    },
+    "expected": {
+      "ok": false,
+      "reason": "empty"
+    }
+  }
+]

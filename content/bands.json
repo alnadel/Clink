@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "worlds": {
+    "1": {
+      "glasses": [
+        2,
+        4
+      ],
+      "phraseNotes": [
+        3,
+        5
+      ],
+      "scales": [
+        "major-pentatonic"
+      ],
+      "par": [
+        1,
+        7
+      ],
+      "tools": [],
+      "ice": [
+        0,
+        0
+      ],
+      "bands": [
+        {
+          "id": "easy",
+          "par": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "medium",
+          "par": [
+            3,
+            4
+          ]
+        },
+        {
+          "id": "hard",
+          "par": [
+            5,
+            7
+          ]
+        }
+      ]
+    },
+    "2": {
+      "glasses": [
+        3,
+        4
+      ],
+      "phraseNotes": [
+        4,
+        6
+      ],
+      "scales": [
+        "major-pentatonic",
+        "major"
+      ],
+      "par": [
+        4,
+        10
+      ],
+      "tools": [
+        "faucet",
+        "sink"
+      ],
+      "ice": [
+        0,
+        0
+      ],
+      "bands": [
+        {
+          "id": "easy",
+          "par": [
+            4,
+            5
+          ]
+        },
+        {
+          "id": "medium",
+          "par": [
+            6,
+            7
+          ]
+        },
+        {
+          "id": "hard",
+          "par": [
+            8,
+            10
+          ]
+        }
+      ]
+    },
+    "3": {
+      "glasses": [
+        3,
+        5
+      ],
+      "phraseNotes": [
+        5,
+        8
+      ],
+      "scales": [
+        "major"
+      ],
+      "par": [
+        6,
+        14
+      ],
+      "tools": [
+        "faucet",
+        "sink"
+      ],
+      "ice": [
+        1,
+        3
+      ],
+      "bands": [
+        {
+          "id": "easy",
+          "par": [
+            6,
+            8
+          ]
+        },
+        {
+          "id": "medium",
+          "par": [
+            9,
+            11
+          ]
+        },
+        {
+          "id": "hard",
+          "par": [
+            12,
+            14
+          ]
+        }
+      ]
+    }
+  }
+}

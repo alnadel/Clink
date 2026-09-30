@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "fx-sink",
+  "world": 2,
+  "scale": {
+    "name": "C major pentatonic",
+    "tonicHz": 130.81,
+    "stepsCents": [0, 200, 400, 700, 900],
+    "range": ["C3", "A5"]
+  },
+  "melody": {
+    "tuneId": "test-tune",
+    "title": "Test Tune",
+    "notes": ["E5", "A4", "D5", "E5"],
+    "beats": [1, 1, 1, 1],
+    "bpm": 100
+  },
+  "glasses": [
+    {
+      "id": "A",
+      "capacity": 5,
+      "emptyNote": "C5",
+      "water": 5
+    },
+    {
+      "id": "B",
+      "capacity": 6,
+      "emptyNote": "D5",
+      "water": 4
+    },
+    {
+      "id": "C",
+      "capacity": 4,
+      "emptyNote": "G5",
+      "water": 4
+    }
+  ],
+  "tools": ["sink"],
+  "ice": [],
+  "par": 6,
+  "optimalSolutions": 1
+}
