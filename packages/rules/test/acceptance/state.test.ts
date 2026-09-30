@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { compileLevel, foundTargets, initialState, isTuned, ringing, stateKey } from '../../src';
 import { FIXTURE_IDS, frozenState, levelJson } from '../helpers';
 
-describe.skip('state helpers', () => {
+describe('state helpers', () => {
   it.each(FIXTURE_IDS)('%s: initialState copies water and countdowns from the file', (id) => {
     const json = levelJson(id);
     const level = compileLevel(json);
