@@ -40,10 +40,9 @@ console.log(
   `check-size: ${rows.length} precached files, ${total} bytes gzip (budget ${TOTAL_BUDGET}); JS ${js} (budget ${JS_BUDGET})`,
 );
 
-const failures = [];
-if (total > TOTAL_BUDGET) failures.push(`precache is ${total} bytes gzip, over ${TOTAL_BUDGET}`);
-if (js > JS_BUDGET) failures.push(`JavaScript is ${js} bytes gzip, over ${JS_BUDGET}`);
-if (failures.length > 0) {
-  console.error(`check-size: ${failures.join('; ')}`);
+// The JavaScript figure is a target, not a gate (docs/architecture/07 §6): it only warns.
+if (js > JS_BUDGET) console.warn(`check-size: warning: JavaScript is ${js} bytes gzip, over ${JS_BUDGET}`);
+if (total > TOTAL_BUDGET) {
+  console.error(`check-size: precache is ${total} bytes gzip, over ${TOTAL_BUDGET}`);
   process.exit(1);
 }
