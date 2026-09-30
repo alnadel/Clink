@@ -476,6 +476,13 @@ window.__clink = {
 };
 ```
 
+The hook also carries `events()` (the in-memory analytics adapter, with `?analytics=memory`),
+`warmed()` (every level pack cached) and `boardOptions()`.
+
+`--mode e2e` builds accept one more parameter: `?unlock=<levelId|all>` marks every level before
+that one as solved (`src/testing/unlock.ts`), so a test can open level 30 without playing 29.
+Reload after it is saved, or continue from the home screen, rather than navigating away at once.
+
 Tests tap with `page.mouse.click(x, y)` on those coordinates. Production builds must not
 contain the hook: the E2E harness issue adds a build check that `__clink` is absent from
 `dist/`.
