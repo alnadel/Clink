@@ -1,30 +1,27 @@
-/**
- * A/B flags (FR-39). Spec: docs/architecture/09-ops.md §4.
- * bucket = fnv1a32(`${deviceId}:${experimentKey}`) % 100
- */
-import type { FlagValue, RemoteConfig } from '@clink/rules';
-import { NotImplementedError } from '../lib/not-implemented';
-
-/** 0..99, stable per device and experiment. */
-export function bucketOf(deviceId: string, experimentKey: string): number {
-  throw new NotImplementedError(`bucketOf(${deviceId}, ${experimentKey})`);
+import { type FlagValue, fnv1a32, type RemoteConfig } from '@clink/rules';
+export function bucketOf(d: string, e: string): number {
+  return fnv1a32(`${d}:${e}`) % 100;
 }
-
-/**
- * Walks `weights` in key order, adding each weight; returns the first variant whose running
- * total is greater than `bucket`. If the weights never exceed the bucket, returns the first key.
- */
-export function assignVariant(bucket: number, weights: Readonly<Record<string, number>>): string {
-  throw new NotImplementedError(`assignVariant(${bucket}, ${Object.keys(weights).length})`);
+export function assignVariant(b: number, w: Readonly<Record<string, number>>): string {
+  let t = 0;
+  const keys = Object.keys(w);
+  for (const k of keys) {
+    t += w[k] as number;
+    if (b < t) return k;
+  }
+  return keys[0] as string;
 }
-
 export interface ResolvedFlags {
-  /** experiment key -> variant name (logged as session_start.ab_flags). */
   assignments: Record<string, string>;
-  /** Merged flag values of every assigned variant, experiments in key order (later wins). */
   flags: Record<string, FlagValue>;
 }
-
-export function resolveFlags(config: RemoteConfig, deviceId: string): ResolvedFlags {
-  throw new NotImplementedError(`resolveFlags(${config.schemaVersion}, ${deviceId})`);
+export function resolveFlags(c: RemoteConfig, d: string): ResolvedFlags {
+  const assignments: Record<string, string> = {};
+  const flags: Record<string, FlagValue> = {};
+  for (const [k, e] of Object.entries(c.experiments)) {
+    const v = assignVariant(bucketOf(d, k), e.weights);
+    assignments[k] = v;
+    Object.assign(flags, e.variants[v] ?? {});
+  }
+  return { assignments, flags };
 }

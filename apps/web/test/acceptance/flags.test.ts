@@ -7,7 +7,7 @@ import { assignVariant, bucketOf, resolveFlags } from '../../src/ops/flags';
 const DEV0 = '00000000-0000-4000-8000-000000000000';
 const DEV1 = '11111111-2222-4333-8444-555555555555';
 
-describe.skip('A/B flags', () => {
+describe('A/B flags', () => {
   it('buckets are stable golden values', () => {
     expect(bucketOf(DEV0, 'stars')).toBe(74);
     expect(bucketOf(DEV0, 'onboarding')).toBe(68);
