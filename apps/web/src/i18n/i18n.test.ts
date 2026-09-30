@@ -20,7 +20,7 @@ describe('createI18n', () => {
     expect(resolveLocale('ar', 'en')).toBe('ar');
   });
 
-  it('falls back to English for keys Arabic does not have yet', () => {
-    expect(createI18n('ar', 'ar').t('play.undo')).toBe('Undo');
+  it('uses the Arabic strings when Arabic is chosen', () => {
+    expect(createI18n('ar', 'en').t('play.undo')).toBe('تراجع');
   });
 });

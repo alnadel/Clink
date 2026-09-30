@@ -15,15 +15,17 @@ import {
   shouldShowInstallPrompt,
   shouldShowSurvey,
 } from '../../platform/install';
-import { resolveReducedMotion, systemPrefersReducedMotion } from '../../platform/motion';
+import { resolveReducedMotion, systemPrefersReducedMotion, watchReducedMotion } from '../../platform/motion';
 import { registerTestTarget } from '../../testing/hook';
 import { GuideBanner } from '../components/GuideBanner';
 import { Hud } from '../components/Hud';
 import { InstallPrompt } from '../components/InstallPrompt';
+import { LiveRegion } from '../components/LiveRegion';
 import { SolveCard } from '../components/SolveCard';
 import { SurveyModal } from '../components/SurveyModal';
 import { showToast } from '../components/Toast';
 import { useStore } from '../hooks/useStore';
+import { actionForKey } from '../keyboard';
 import { type Services, useServices, useT } from '../services';
 import { shareResult } from '../share';
 
@@ -39,7 +41,7 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
   const services = useServices();
   const t = useT();
   const location = useLocation();
-  const host = useRef<HTMLDivElement>(null);
+  const host = useRef<HTMLElement>(null);
   const boardRef = useRef<BoardView | null>(null);
   const [controller, setController] = useState<PlayController | null>(null);
   const play: PlayTarget = target ?? { kind, levelId, puzzleNo: null };
@@ -109,6 +111,7 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
             level && computeLayout(container.clientWidth, container.clientHeight, level).tools[tool];
           return rect ? pageCenter(container, rect) : { x: 0, y: 0 };
         },
+        boardOptions: () => currentBoardOptions(svc),
         hint: async () => {
           const level = ctl.level();
           const snap = ctl.snapshot();
@@ -138,6 +141,45 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
       lowEffects: false,
     });
   }, [labels, reducedMotion]);
+
+  // Desktop keys (docs/architecture/10 §5) and the operating system's reduced-motion preference (FR-30).
+  useEffect(() => {
+    if (!controller) return;
+    const onKeyDown = (event: KeyboardEvent): void => {
+      const target = event.target as HTMLElement | null;
+      const action = actionForKey({
+        key: event.key,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        altKey: event.altKey,
+        targetTag: target?.tagName,
+        isContentEditable: target?.isContentEditable,
+      });
+      if (!action || document.querySelector('[role="dialog"]')) return;
+      event.preventDefault();
+      if (action.type === 'glass') controller.board.onGlassTap(action.index);
+      else if (action.type === 'tool') controller.board.onToolTap(action.tool);
+      else if (action.type === 'melody') controller.board.onMelodyTap();
+      else controller.undo();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    const stopWatching = watchReducedMotion(() =>
+      boardRef.current?.setOptions(currentBoardOptions(services)),
+    );
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      stopWatching();
+    };
+  }, [controller, services]);
+
+  const move = view?.lastMove ?? null;
+  const announcement = move
+    ? t(move.type === 'pour' ? 'a11y.moved' : move.type === 'faucet' ? 'a11y.faucet' : 'a11y.sink', {
+        from: move.from ?? '',
+        to: move.to ?? '',
+        moves: move.moves,
+      })
+    : '';
 
   const share = async (): Promise<void> => {
     if (!view || view.stars === null || play.puzzleNo === null) return;
@@ -209,7 +251,8 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
         onHint={() => void controller?.hint()}
       />
       <GuideBanner textKey={view?.guideTextKey ?? null} />
-      <div class="board-host" ref={host} data-testid="board" />
+      <section class="board-host" ref={host} data-testid="board" aria-label={t('a11y.board')} />
+      <LiveRegion text={view?.status === 'solved' ? t('a11y.solved') : announcement} />
       {view?.status === 'missing' ? <p class="muted center">{t('play.notFound')}</p> : null}
       {view?.songActive ? (
         <button type="button" class="btn skip" onClick={() => controller?.skipSong()}>

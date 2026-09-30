@@ -63,7 +63,7 @@ export const PHRASES: Record<string, TunePhraseJson[]> = {
     phrase('w2-a', PENT, 'E4 D4 C4 D4 E4 E4'),
   ],
   'morning-mood': [phrase('w1-a', PENT, 'G4 E4 D4 C4 D4', 88), phrase('w2-a', PENT, 'G4 E4 D4 C4 D4 E4', 88)],
-  'oh-susanna': [phrase('w1-a', PENT, 'C4 D4 E4 G4 G4', 112), phrase('w2-a', PENT, 'C4 D4 E4 G4 G4 A4', 112)],
+  'oh-susanna': [phrase('w1-a', PENT, 'C4 D4 E4 G4 G4', 112), phrase('w2-a', PENT, 'C4 D4 E4 G4 G4 E4', 112)],
   'ode-to-joy': [
     phrase('w2-major-a', MAJOR, 'E4 E4 F4 G4 G4', 108),
     phrase('w3-a', MAJOR, 'E4 E4 F4 G4 G4 F4 E4 D4', 108),
@@ -73,7 +73,7 @@ export const PHRASES: Record<string, TunePhraseJson[]> = {
     phrase('w3-a', MAJOR, 'G4 A4 G4 F4 E4 F4 G4', 104),
   ],
   'in-the-hall-of-the-mountain-king': [
-    phrase('w2-major-a', MAJOR, 'C4 D4 E4 F4 G4 E4', 120),
+    phrase('w2-major-a', MAJOR, 'D4 E4 F4 G4 E4', 120),
     phrase('w3-a', MAJOR, 'C4 D4 E4 F4 G4 E4 G4', 120),
   ],
 };
@@ -264,18 +264,25 @@ export function seedLevels(options: SeedOptions): void {
     const [tune, phraseId] = pick(slot.phrases, 0);
     const started = Date.now();
     let candidates: Candidate[] = [];
-    for (const attempts of [3000, 12000]) {
-      candidates = generate({
-        contentDir: options.contentDir,
-        tune,
-        phrase: phraseId,
-        world: slot.world,
-        band: slot.band,
-        count: 30,
-        seed: slot.seed,
-        attempts,
-      }).filter((c) => !used.has(setupKey(c.level)) && (!slot.tools || sameTools(c.level.tools, slot.tools)));
-      if (candidates.length > 0) break;
+    try {
+      for (const attempts of [3000, 12000]) {
+        candidates = generate({
+          contentDir: options.contentDir,
+          tune,
+          phrase: phraseId,
+          world: slot.world,
+          band: slot.band,
+          count: 30,
+          seed: slot.seed,
+          attempts,
+        }).filter(
+          (c) => !used.has(setupKey(c.level)) && (!slot.tools || sameTools(c.level.tools, slot.tools)),
+        );
+        if (candidates.length > 0) break;
+      }
+    } catch (error) {
+      log(`${slot.id}: FAILED ${error instanceof Error ? error.message : String(error)}`);
+      continue;
     }
     const chosen = choose(candidates, slot);
     if (!chosen) {
@@ -360,11 +367,18 @@ export function seedGuides(contentDir: string): void {
   writeJson(join(contentDir, 'guides.json'), buildGuides(contentDir));
 }
 
-/** Points schedule.json at every daily file, in order. */
+/** Points schedule.json at the daily files that exist, in order. */
 export function seedSchedule(contentDir: string): void {
   const file = join(contentDir, 'schedule.json');
   const schedule = readJson(file) as { puzzles: string[] };
-  schedule.puzzles = planDaily().map((slot) => slot.id);
+  const existing = new Set(
+    loadContent(contentDir)
+      .levels.filter((l) => l.kind === 'daily')
+      .map((l) => (l.json as { id?: string } | null)?.id),
+  );
+  schedule.puzzles = planDaily()
+    .map((slot) => slot.id)
+    .filter((id) => existing.has(id));
   writeJson(file, schedule);
 }
 

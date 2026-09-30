@@ -7,6 +7,7 @@ import type { I18n } from '../i18n/types';
 import type { Store } from '../lib/store';
 import type { Analytics } from '../ops/events';
 import type { ResolvedFlags } from '../ops/flags';
+import type { Haptics } from '../platform/haptics';
 import type { Profile, Progress, SaveStore } from '../save/types';
 import type { HintClient } from '../workers/hint-client';
 import { useStore } from './hooks/useStore';
@@ -24,6 +25,7 @@ export interface Services {
   flags: Store<ResolvedFlags>;
   profile: Store<Profile>;
   progress: Store<Progress>;
+  haptics: Haptics;
 }
 
 export const ServicesContext = createContext<Services | null>(null);

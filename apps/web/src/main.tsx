@@ -20,6 +20,7 @@ import { browserOf, platformOf, shouldStartSession } from './ops/session';
 import { createSaveStore, idbBackend } from './save/store';
 import type { Profile, Progress } from './save/types';
 import './styles/global.css';
+import { createHaptics } from './platform/haptics';
 import { captureInstallPrompt } from './platform/install';
 import { registerServiceWorker } from './platform/sw';
 import { installTestHook, registerTestTarget } from './testing/hook';
@@ -129,6 +130,7 @@ async function bootstrap(): Promise<void> {
     flags: flagsStore,
     profile: profileStore,
     progress: progressStore,
+    haptics: createHaptics(() => profileStore.get().settings.vibration),
   };
   render(<App services={services} />, root as HTMLElement);
 

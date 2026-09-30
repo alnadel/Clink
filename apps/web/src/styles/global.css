@@ -1,3 +1,5 @@
+@import "@fontsource/noto-sans-arabic/arabic-400.css";
+@import "@fontsource/noto-sans-arabic/arabic-700.css";
 /* Use CSS logical properties (margin-inline-start, not margin-left) so RTL works (FR-31). */
 :root {
   color-scheme: dark;

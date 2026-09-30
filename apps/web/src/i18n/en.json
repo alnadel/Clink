@@ -90,5 +90,19 @@
   "survey.very": "Very disappointed",
   "survey.somewhat": "Somewhat disappointed",
   "survey.not": "Not disappointed",
-  "survey.skip": "Skip"
+  "survey.skip": "Skip",
+  "a11y.board": "Puzzle board. Press 1 to 5 to tap a glass, F for the faucet, S for the sink, Space to hear the melody, Z to undo.",
+  "a11y.faucet": "Filled glass {to}. {moves} moves.",
+  "a11y.sink": "Emptied glass {from}. {moves} moves.",
+  "a11y.solved": "Tuned! Every note rings.",
+  "guide.listen": "Tap a glass to hear its note.",
+  "guide.pour": "Now tap another glass to pour water into it.",
+  "guide.tuned": "Every note in the bar is ringing. You tuned it!",
+  "guide.melody": "Tap the melody bar to hear the song.",
+  "guide.goal": "Pour until every note in the bar lights up.",
+  "guide.found": "A note lights up while a glass rings it.",
+  "guide.giveUp": "Sometimes you must give up a note to finish.",
+  "guide.faucet": "The faucet fills a glass to the brim. Select a glass, then tap the faucet.",
+  "guide.sink": "The sink empties a glass. Select a glass, then tap the sink.",
+  "guide.ice": "Ice melts into water after the number of moves shown."
 }

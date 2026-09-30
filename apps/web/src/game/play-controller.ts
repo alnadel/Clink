@@ -19,6 +19,7 @@ import { selectScripts } from '../guide/select';
 import { createStore, type Store } from '../lib/store';
 import type { Analytics } from '../ops/events';
 import type { ResolvedFlags } from '../ops/flags';
+import type { Haptics } from '../platform/haptics';
 import type { CurrentLevel, Profile, Progress, SaveStore } from '../save/types';
 import type { HintClient } from '../workers/hint-client';
 import { createPlayAlong, glassForNote } from './playalong';
@@ -43,6 +44,7 @@ export interface PlayDeps {
   progress: Store<Progress>;
   flags: Store<ResolvedFlags>;
   config: Store<RemoteConfig>;
+  haptics?: Haptics;
 }
 
 export interface PlayOptions {
@@ -64,6 +66,14 @@ export interface PlayViewState {
   songActive: boolean;
   /** True when this solve was the first time this level (or daily) was solved. */
   firstSolve: boolean;
+  /** The latest accepted move, for screen-reader announcements. `seq` changes with every move. */
+  lastMove: {
+    seq: number;
+    type: 'pour' | 'faucet' | 'sink';
+    from: string | null;
+    to: string | null;
+    moves: number;
+  } | null;
   /** i18n key of the guide line to show, or null. */
   guideTextKey: string | null;
   stars: 1 | 2 | 3 | null;
@@ -95,6 +105,7 @@ const INITIAL: PlayViewState = {
   hintReady: false,
   songActive: false,
   firstSolve: false,
+  lastMove: null,
   guideTextKey: null,
   stars: null,
   tuneTitle: '',
@@ -344,6 +355,7 @@ export function createPlayController(
       // Both glasses ring their new notes for each unit: an in-tune run (rule 7, FR-11).
       if (event.fromPos !== null) deps.audio.ring(hz(event.fromPos), undefined, 0.6);
       if (event.toPos !== null) deps.audio.ring(hz(event.toPos), undefined, 0.6);
+      deps.haptics?.step();
     } else if (event.type === 'melt') {
       deps.audio.sfx('melt');
       deps.audio.ring(hz(event.pos), undefined, 0.6);
@@ -365,6 +377,7 @@ export function createPlayController(
         case 'shake':
           board.shake(effect.glass);
           deps.audio.sfx('refuse');
+          deps.haptics?.refuse();
           break;
         case 'need-selection':
           options.notify('play.selectGlassFirst');
@@ -377,6 +390,18 @@ export function createPlayController(
           );
           persist();
           syncView();
+          view.update((v) => ({
+            ...v,
+            lastMove: {
+              seq: effect.moveNo,
+              type: move.type,
+              from:
+                move.type === 'pour' ? glassId(move.from) : move.type === 'sink' ? glassId(move.glass) : null,
+              to:
+                move.type === 'pour' ? glassId(move.to) : move.type === 'faucet' ? glassId(move.glass) : null,
+              moves: effect.moveNo,
+            },
+          }));
           deps.analytics.track('move', {
             level_id: target.levelId,
             move_no: effect.moveNo,
@@ -557,6 +582,7 @@ export function createPlayController(
       seconds: Math.round(elapsedMs() / 1000),
     });
     deps.audio.sfx('flourish');
+    deps.haptics?.solve();
     await wait(SOLVE_PAUSE_MS);
     if (disposed) return;
     if (deps.profile.get().settings.autoPlaySong) autoPlay();
