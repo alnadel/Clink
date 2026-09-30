@@ -21,6 +21,7 @@
     "workbox-window": "7.4.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@babel/core": "7.29.7",
     "@playwright/test": "1.63.0",
     "@preact/preset-vite": "2.10.6",
