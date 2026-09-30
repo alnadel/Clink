@@ -59,27 +59,30 @@ export function PlayScreen({ levelId = '', kind = 'campaign', target }: PlayScre
     const observer = new ResizeObserver(() => board.resize());
     observer.observe(container);
 
-    registerTestTarget({
-      snapshot: () => ctl.snapshot(),
-      glassCenter: (index) => centerOf(container, ctl, index),
-      melodyCenter: () => {
-        const level = ctl.level();
-        if (!level) return { x: 0, y: 0 };
-        const bar = computeLayout(container.clientWidth, container.clientHeight, level).melodyBar;
-        return pageCenter(container, bar);
-      },
-      toolCenter: (tool: ToolName) => {
-        const level = ctl.level();
-        const rect = level && computeLayout(container.clientWidth, container.clientHeight, level).tools[tool];
-        return rect ? pageCenter(container, rect) : { x: 0, y: 0 };
-      },
-      hint: async () => {
-        const level = ctl.level();
-        const snap = ctl.snapshot();
-        if (!level || !snap) return { type: 'none' };
-        return svc.hints.hint(level.id, snap.state);
-      },
-    });
+    if (import.meta.env.MODE === 'e2e') {
+      registerTestTarget({
+        snapshot: () => ctl.snapshot(),
+        glassCenter: (index) => centerOf(container, ctl, index),
+        melodyCenter: () => {
+          const level = ctl.level();
+          if (!level) return { x: 0, y: 0 };
+          const bar = computeLayout(container.clientWidth, container.clientHeight, level).melodyBar;
+          return pageCenter(container, bar);
+        },
+        toolCenter: (tool: ToolName) => {
+          const level = ctl.level();
+          const rect =
+            level && computeLayout(container.clientWidth, container.clientHeight, level).tools[tool];
+          return rect ? pageCenter(container, rect) : { x: 0, y: 0 };
+        },
+        hint: async () => {
+          const level = ctl.level();
+          const snap = ctl.snapshot();
+          if (!level || !snap) return { type: 'none' };
+          return svc.hints.hint(level.id, snap.state);
+        },
+      });
+    }
 
     return () => {
       disposed = true;
