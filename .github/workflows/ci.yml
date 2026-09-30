@@ -26,6 +26,8 @@ jobs:
         run: pnpm typecheck
       - name: Unit and acceptance tests
         run: pnpm test
+      - name: Rules coverage floor (90% lines and branches)
+        run: pnpm test:coverage
       - name: Level content check (FR-19)
         run: pnpm levels:check
       - name: Build

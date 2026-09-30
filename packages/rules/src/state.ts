@@ -1,4 +1,5 @@
 import type { Level, Pos, State } from './types';
+import { at } from './util';
 
 /** Start state: each glass's `water` and each cube's `countdown` from the level file. */
 export function initialState(level: Level): State {
@@ -10,7 +11,7 @@ export function initialState(level: Level): State {
 
 /** Position each glass rings: glasses[i].emptyPos - state.water[i] (rule 2). */
 export function ringing(level: Level, state: State): Pos[] {
-  return level.glasses.map((glass, i) => glass.emptyPos - (state.water[i] ?? 0));
+  return level.glasses.map((glass, i) => glass.emptyPos - at(state.water, i));
 }
 
 /** For each of level.targets, whether at least one glass rings it (rule 10). */

@@ -1,4 +1,5 @@
 import type { Level, Move, MoveEvent, MoveResult, State } from './types';
+import { at } from './util';
 
 /**
  * Every candidate move in CANONICAL ORDER, legal or not: pours (from ascending, then to ascending),
@@ -24,11 +25,13 @@ export function allMoves(level: Level): Move[] {
  */
 export function applyMove(level: Level, state: State, move: Move): MoveResult {
   const water = [...state.water];
+  const capacities = level.glasses.map((glass) => glass.capacity);
+  const emptyPositions = level.glasses.map((glass) => glass.emptyPos);
   const ice = [...state.ice];
   const count = water.length;
-  const capacity = (glass: number) => level.glasses[glass]?.capacity ?? 0;
+  const capacity = (glass: number) => at(capacities, glass);
   const inRange = (glass: number) => Number.isInteger(glass) && glass >= 0 && glass < count;
-  const ring = (glass: number) => (level.glasses[glass]?.emptyPos ?? 0) - (water[glass] ?? 0);
+  const ring = (glass: number) => at(emptyPositions, glass) - at(water, glass);
   const events: MoveEvent[] = [];
   let units = 0;
 
@@ -36,12 +39,12 @@ export function applyMove(level: Level, state: State, move: Move): MoveResult {
     const { from, to } = move;
     if (!inRange(from) || !inRange(to)) return { ok: false, reason: 'bad-glass' };
     if (from === to) return { ok: false, reason: 'same-glass' };
-    if ((water[from] ?? 0) === 0) return { ok: false, reason: 'empty' };
-    if ((water[to] ?? 0) >= capacity(to)) return { ok: false, reason: 'full' };
-    units = Math.min(water[from] ?? 0, capacity(to) - (water[to] ?? 0));
+    if (at(water, from) === 0) return { ok: false, reason: 'empty' };
+    if (at(water, to) >= capacity(to)) return { ok: false, reason: 'full' };
+    units = Math.min(at(water, from), capacity(to) - at(water, to));
     for (let unit = 0; unit < units; unit++) {
-      water[from] = (water[from] ?? 0) - 1;
-      water[to] = (water[to] ?? 0) + 1;
+      water[from] = at(water, from) - 1;
+      water[to] = at(water, to) + 1;
       events.push({ type: 'unit', from, to, fromPos: ring(from), toPos: ring(to) });
     }
   } else {
@@ -49,17 +52,17 @@ export function applyMove(level: Level, state: State, move: Move): MoveResult {
     if (!inRange(glass)) return { ok: false, reason: 'bad-glass' };
     if (!level.tools[move.type]) return { ok: false, reason: 'no-tool' };
     if (move.type === 'faucet') {
-      if ((water[glass] ?? 0) >= capacity(glass)) return { ok: false, reason: 'full' };
-      units = capacity(glass) - (water[glass] ?? 0);
+      if (at(water, glass) >= capacity(glass)) return { ok: false, reason: 'full' };
+      units = capacity(glass) - at(water, glass);
       for (let unit = 0; unit < units; unit++) {
-        water[glass] = (water[glass] ?? 0) + 1;
+        water[glass] = at(water, glass) + 1;
         events.push({ type: 'unit', from: null, to: glass, fromPos: null, toPos: ring(glass) });
       }
     } else {
-      if ((water[glass] ?? 0) === 0) return { ok: false, reason: 'empty' };
-      units = water[glass] ?? 0;
+      if (at(water, glass) === 0) return { ok: false, reason: 'empty' };
+      units = at(water, glass);
       for (let unit = 0; unit < units; unit++) {
-        water[glass] = (water[glass] ?? 0) - 1;
+        water[glass] = at(water, glass) - 1;
         events.push({ type: 'unit', from: glass, to: null, fromPos: ring(glass), toPos: null });
       }
     }
@@ -67,12 +70,12 @@ export function applyMove(level: Level, state: State, move: Move): MoveResult {
 
   // Rule 9 / D2: every countdown above 0 drops by one, in cube order; a cube reaching 0 melts.
   for (const cube of level.ice) {
-    const countdown = ice[cube.index] ?? 0;
+    const countdown = at(ice, cube.index);
     if (countdown <= 0) continue;
     ice[cube.index] = countdown - 1;
     if (countdown - 1 !== 0) continue;
-    if ((water[cube.glass] ?? 0) < capacity(cube.glass)) {
-      water[cube.glass] = (water[cube.glass] ?? 0) + 1;
+    if (at(water, cube.glass) < capacity(cube.glass)) {
+      water[cube.glass] = at(water, cube.glass) + 1;
       events.push({ type: 'melt', cube: cube.index, glass: cube.glass, pos: ring(cube.glass) });
     } else {
       events.push({ type: 'spill', cube: cube.index, glass: cube.glass });

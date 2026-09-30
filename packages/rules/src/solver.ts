@@ -10,6 +10,7 @@ import {
   type SolveSummary,
   type State,
 } from './types';
+import { at } from './util';
 
 /**
  * Breadth-first search over every state reachable from the start, NOT stopping at tuned states
@@ -30,7 +31,7 @@ export function explore(level: Level, options?: ExploreOptions): SolverGraph {
   for (let i = 0; i < states.length; i++) {
     const current = states[i];
     if (!current) continue;
-    const currentDepth = depth[i] ?? 0;
+    const currentDepth = at(depth, i);
     for (const move of legalMoves(level, current)) {
       const result = applyMove(level, current, move);
       if (!result.ok) continue;
@@ -49,27 +50,27 @@ export function explore(level: Level, options?: ExploreOptions): SolverGraph {
       }
       edgeFrom.push(i);
       edgeTo.push(j);
-      if (depth[j] === currentDepth + 1) ways[j] = (ways[j] ?? 0) + (ways[i] ?? 0);
+      if (depth[j] === currentDepth + 1) ways[j] = at(ways, j) + at(ways, i);
     }
   }
 
   const tuned = states.map((state) => isTuned(level, state));
   let par: number | null = null;
   tuned.forEach((isGoal, i) => {
-    const d = depth[i] ?? 0;
+    const d = at(depth, i);
     if (isGoal && (par === null || d < par)) par = d;
   });
   let optimalSolutions = 0;
   if (par !== null) {
     tuned.forEach((isGoal, i) => {
-      if (isGoal && depth[i] === par) optimalSolutions += ways[i] ?? 0;
+      if (isGoal && depth[i] === par) optimalSolutions += at(ways, i);
     });
   }
 
   // Distance to a solve: reverse BFS from every tuned state.
   const predecessors: number[][] = states.map(() => []);
   edgeFrom.forEach((from, e) => {
-    predecessors[edgeTo[e] ?? 0]?.push(from);
+    predecessors[at(edgeTo, e)]?.push(from);
   });
   const distance = new Int32Array(states.length).fill(-1);
   const queue: number[] = [];
@@ -80,10 +81,10 @@ export function explore(level: Level, options?: ExploreOptions): SolverGraph {
     }
   });
   for (let head = 0; head < queue.length; head++) {
-    const x = queue[head] ?? 0;
+    const x = at(queue, head);
     for (const p of predecessors[x] ?? []) {
       if (distance[p] === -1) {
-        distance[p] = (distance[x] ?? 0) + 1;
+        distance[p] = at(distance, x) + 1;
         queue.push(p);
       }
     }
