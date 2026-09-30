@@ -158,3 +158,71 @@ a {
   padding: 32px 16px;
   text-align: center;
 }
+
+.play {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  max-inline-size: 640px;
+  margin-inline: auto;
+}
+
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline: 8px;
+  min-block-size: 64px;
+}
+
+.hud-title {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.hud-title h1 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hud-moves {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.board-host {
+  flex: 1;
+  min-block-size: 0;
+  position: relative;
+  touch-action: manipulation;
+}
+
+.board-host canvas {
+  display: block;
+}
+
+.skip {
+  position: fixed;
+  inset-inline-end: 16px;
+  inset-block-end: 16px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.center {
+  text-align: center;
+}
+
+.solve-card {
+  text-align: center;
+}
+
+.stars {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 0.2em;
+  color: #fde047;
+}
