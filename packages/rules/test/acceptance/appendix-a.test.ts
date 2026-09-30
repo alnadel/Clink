@@ -13,7 +13,7 @@ import {
 } from '../../src';
 import { APPENDIX_A_TRACE, levelJson } from '../helpers';
 
-describe.skip('BRD Appendix A: w1-08 in five moves', () => {
+describe('BRD Appendix A: w1-08 in five moves', () => {
   it('matches the table in Appendix A after every move', () => {
     const level = compileLevel(levelJson(APPENDIX_A_TRACE.level));
     const names = (s: State) => ringing(level, s).map((p) => level.positions[p]?.name);

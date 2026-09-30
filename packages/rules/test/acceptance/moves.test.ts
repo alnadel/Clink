@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { allMoves, applyMove, compileLevel, legalMoves, type Move } from '../../src';
 import { deepFreeze, FIXTURE_IDS, frozenState, levelJson, MOVE_CASES } from '../helpers';
 
-describe.skip('applyMove: fixture cases', () => {
+describe('applyMove: fixture cases', () => {
   it.each(MOVE_CASES.map((c) => [c.name, c] as const))('%s', (_name, c) => {
     const level = compileLevel(levelJson(c.level));
     const state = frozenState(c.state.water, c.state.ice);
@@ -13,7 +13,7 @@ describe.skip('applyMove: fixture cases', () => {
   });
 });
 
-describe.skip('allMoves and legalMoves', () => {
+describe('allMoves and legalMoves', () => {
   const pours = (n: number): Move[] => {
     const out: Move[] = [];
     for (let from = 0; from < n; from++)
