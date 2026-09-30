@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { starsFor } from '../../src';
 
-describe.skip('starsFor', () => {
+describe('starsFor', () => {
   it.each([
     // moves, par, hinted, expected
     [5, 5, false, 3],
