@@ -43,6 +43,8 @@ export const SCALE_KINDS: Record<string, ScaleKind> = {
  * solve. (The checker's hard limit is still 100,000 states.)
  */
 const GENERATOR_MAX_STATES = 20_000;
+/** Approximate size of the state space a generated setup may have (product of glass capacities plus one). */
+const STATE_BUDGET = 4000;
 
 const GLASS_IDS = ['A', 'B', 'C', 'D', 'E'];
 
@@ -111,9 +113,11 @@ export function generate(options: GenerateOptions): Candidate[] {
 
   for (let attempt = 0; attempt < options.attempts && pool.length < wanted; attempt++) {
     const glassCount = randInt(rng, minGlasses, rules.glasses[1]);
+    // Keep the state space small enough to solve: more glasses means smaller glasses.
+    const maxCapacity = Math.max(2, Math.min(12, Math.floor(STATE_BUDGET ** (1 / glassCount)) - 1));
     const glasses: LevelJson['glasses'] = [];
     for (let i = 0; i < glassCount; i++) {
-      const capacity = randInt(rng, 2, 12);
+      const capacity = randInt(rng, 2, maxCapacity);
       const emptyPos = randInt(rng, capacity, positions.length - 1);
       const water = randInt(rng, 0, capacity);
       glasses.push({ id: GLASS_IDS[i] ?? 'Z', capacity, emptyNote: positions[emptyPos]?.name ?? top, water });

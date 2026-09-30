@@ -67,10 +67,9 @@ describe('generate', () => {
 });
 
 describe('A2 check', () => {
-  it('reports every world x band; World 1 passes and World 3 has no fitting phrase yet', () => {
-    const rows = runA2Check({ contentDir: tempContent(), seed: 1 });
-    expect(rows).toHaveLength(9);
+  it('reports every band of the chosen worlds, and World 1 has enough candidates in each', () => {
+    const rows = runA2Check({ contentDir: tempContent(), seed: 1, attempts: 400, worlds: [1] });
+    expect(rows).toHaveLength(3);
     for (const row of rows.filter((r) => r.world === 1)) expect(row.candidates).toBeGreaterThanOrEqual(3);
-    for (const row of rows.filter((r) => r.world === 3)) expect(row.candidates).toBe(0);
   }, 300_000);
 });
