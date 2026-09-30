@@ -16,6 +16,7 @@ interface SolveCardProps {
   onRetry(): void;
   onMap(): void;
   onHome(): void;
+  onShare?(): void;
 }
 
 /** The win card: stars, moves against par, and the tune the player just performed. */
@@ -45,10 +46,11 @@ export function SolveCard(props: SolveCardProps): JSX.Element {
           </>
         ) : (
           <>
-            <Button onClick={props.onReplay}>{t('solve.replay')}</Button>
-            <Button variant="primary" onClick={props.onHome}>
-              {t('solve.home')}
+            <Button variant="primary" onClick={props.onShare}>
+              {t('solve.share')}
             </Button>
+            <Button onClick={props.onReplay}>{t('solve.replay')}</Button>
+            <Button onClick={props.onHome}>{t('solve.home')}</Button>
           </>
         )}
       </div>
