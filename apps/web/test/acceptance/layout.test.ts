@@ -55,7 +55,7 @@ function checkInvariants(layout: BoardLayout, json: LevelJson) {
   }
 }
 
-describe.skip('computeLayout', () => {
+describe('computeLayout', () => {
   it('w1-08 on a 360 x 560 board matches the formula exactly', () => {
     const layout = computeLayout(360, 560, compileLevel(w108Json()));
     expect(layout.width).toBe(360);
