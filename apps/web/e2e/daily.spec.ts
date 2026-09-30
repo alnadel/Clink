@@ -13,7 +13,9 @@ test('before launch there is no daily puzzle', async ({ page }) => {
   await expect(page.getByRole('link', { name: /^Daily #/ })).toHaveCount(0);
 });
 
-test('the daily can be solved, shared and starts a streak', async ({ page, context }) => {
+test('the daily can be solved, shared and starts a streak', async ({ page, context, browserName }) => {
+  // Reading the clipboard needs Chromium's permission model; Safari answers the share sheet instead.
+  test.skip(browserName !== 'chromium', 'clipboard read permission is Chromium only');
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.clock.setFixedTime(DAY_3);
   await startMuted(page, '/?analytics=memory&unlock=w1-02');

@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 /** Waits until the board exists and the browser has painted a couple of frames. */
 export async function waitForBoard(page: Page): Promise<void> {
@@ -92,10 +92,42 @@ export async function solveByHints(page: Page): Promise<number> {
   throw new Error('the level was not solved in 60 moves');
 }
 
-/** Chooses "Play muted" on a first launch and waits for the board of the level it opens. */
+/** Reads one record of the app's IndexedDB store, or null when there is none yet. */
+async function readStored(page: Page, key: string): Promise<unknown> {
+  return page.evaluate(
+    (name) =>
+      new Promise<unknown>((resolve) => {
+        const open = indexedDB.open('clink');
+        open.onerror = () => resolve(null);
+        open.onsuccess = () => {
+          const db = open.result;
+          if (!db.objectStoreNames.contains('kv')) return resolve(null);
+          const request = db.transaction('kv').objectStore('kv').get(name);
+          request.onsuccess = () => resolve(request.result ?? null);
+          request.onerror = () => resolve(null);
+        };
+      }),
+    key,
+  );
+}
+
+/**
+ * Chooses "Play muted" on a first launch and waits until that choice (and any `unlock` progress) is stored,
+ * so that a navigation right afterwards cannot drop the write and show the sound question again.
+ */
 export async function startMuted(page: Page, url = '/'): Promise<void> {
   await page.goto(url);
   await page.getByRole('button', { name: 'Play muted' }).click();
+  await expect.poll(() => readStored(page, 'profile')).toMatchObject({ soundChoiceMade: true });
+  if (url.includes('unlock=')) {
+    await expect
+      .poll(
+        async () =>
+          Object.keys(((await readStored(page, 'progress')) as { levels?: object } | null)?.levels ?? {})
+            .length,
+      )
+      .toBeGreaterThan(0);
+  }
 }
 
 /** Opens the next open level from the home screen, the way a player continues. */

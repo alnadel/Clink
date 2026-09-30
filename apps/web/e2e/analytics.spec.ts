@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continuePlaying, flushed, pour, waitForBoard } from './helpers';
+import { continuePlaying, flushed, pour, startMuted, waitForBoard } from './helpers';
 
 const APPENDIX_A: [number, number][] = [
   [2, 1],
@@ -10,8 +10,7 @@ const APPENDIX_A: [number, number][] = [
 ];
 
 test('a scripted session sends its events in order (FR-36)', async ({ page }) => {
-  await page.goto('/?analytics=memory&unlock=w1-08');
-  await page.getByRole('button', { name: 'Play muted' }).click();
+  await startMuted(page, '/?analytics=memory&unlock=w1-08');
   await continuePlaying(page);
   await waitForBoard(page);
 

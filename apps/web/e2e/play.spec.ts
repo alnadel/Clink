@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { pour, tapGlass, waitForBoard } from './helpers';
+import { continuePlaying, pour, startMuted, tapGlass, waitForBoard } from './helpers';
 
 /** Appendix A: C into B, B into A, A into C, B into A, C into B (glass indices 2>1, 1>0, 0>2, 1>0, 2>1). */
 const APPENDIX_A: [number, number][] = [
@@ -10,10 +10,9 @@ const APPENDIX_A: [number, number][] = [
   [2, 1],
 ];
 
-async function open(page: Page, path = '/play/w1-08') {
-  await page.goto('/?unlock=w1-08');
-  await page.getByRole('button', { name: 'Play muted' }).click();
-  await page.goto(path);
+async function open(page: Page) {
+  await startMuted(page, '/?unlock=w1-08');
+  await continuePlaying(page);
   await waitForBoard(page);
 }
 

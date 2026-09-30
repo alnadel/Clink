@@ -27,7 +27,7 @@ import type { Profile, Progress } from './save/types';
 import './styles/global.css';
 import { createHaptics } from './platform/haptics';
 import { captureInstallPrompt } from './platform/install';
-import { registerServiceWorker } from './platform/sw';
+import { registerServiceWorker, whenControlled } from './platform/sw';
 import { installTestHook, registerTestTarget } from './testing/hook';
 import { unlockProgress } from './testing/unlock';
 import { showToast } from './ui/components/Toast';
@@ -152,12 +152,14 @@ async function bootstrap(): Promise<void> {
     analytics.track('install', { platform: platformOf(navigator.userAgent, navigator.maxTouchPoints) }),
   );
   registerServiceWorker(() => showToast(services.i18n.get().t('app.updated')));
-  // Cache every level pack a few seconds after start so the whole game works offline (FR-35).
-  setTimeout(() => {
-    void content.warm().then(() => {
-      if (import.meta.env.MODE === 'e2e') registerTestTarget({ warmed: () => true });
-    });
-  }, 5000);
+  // Cache every level pack a few seconds after start, once the service worker is in charge (FR-35).
+  void whenControlled().then(() => {
+    setTimeout(() => {
+      void content.warm().then(() => {
+        if (import.meta.env.MODE === 'e2e') registerTestTarget({ warmed: () => true });
+      });
+    }, 5000);
+  });
   // Ask the browser not to evict our saves, after the first user gesture (NFR-08).
   document.addEventListener('pointerdown', () => void save.requestPersistence(), { once: true });
 }

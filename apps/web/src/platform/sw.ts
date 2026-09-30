@@ -12,3 +12,22 @@ export function registerServiceWorker(onUpdated: () => void): void {
   });
   void wb.register().catch(() => {});
 }
+
+/**
+ * Resolves once a service worker controls the page: at once when it already does or cannot (development,
+ * unsupported browsers), otherwise on `controllerchange`, and in any case after `timeoutMs`. Downloads made
+ * before that point are not in the worker's cache.
+ */
+export function whenControlled(timeoutMs = 30_000): Promise<void> {
+  if (!import.meta.env.PROD || !('serviceWorker' in navigator) || navigator.serviceWorker.controller)
+    return Promise.resolve();
+  return new Promise((resolve) => {
+    const done = (): void => {
+      clearTimeout(timer);
+      navigator.serviceWorker.removeEventListener('controllerchange', done);
+      resolve();
+    };
+    const timer = setTimeout(done, timeoutMs);
+    navigator.serviceWorker.addEventListener('controllerchange', done);
+  });
+}

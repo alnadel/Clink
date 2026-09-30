@@ -66,7 +66,19 @@ export async function loadContent(options: LoadContentOptions = {}): Promise<Con
       return level;
     },
     async warm() {
-      await Promise.allSettled(manifest.packs.map((pack) => loadPack(pack.file)));
+      // What the page fetched before the service worker took control is not in the worker's cache, so the
+      // manifest and every pack are requested again, now through it. The body is read to the end, or the
+      // worker never gets to store the response.
+      const fetchAll = async (url: string): Promise<void> => {
+        await (await doFetch(url)).arrayBuffer();
+      };
+      await Promise.allSettled([
+        fetchAll(`${baseUrl}/content/manifest.json`),
+        ...manifest.packs.map(async (pack) => {
+          await loadPack(pack.file);
+          await fetchAll(`${baseUrl}/content/packs/${pack.file}`);
+        }),
+      ]);
     },
   };
 }
