@@ -16,7 +16,10 @@
     "dev": "pnpm --filter @clink/web dev",
     "build": "pnpm --filter @clink/web build",
     "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build",
-    "levels:check": "tsx packages/content-tools/src/cli/check.ts"
+    "levels:check": "tsx packages/content-tools/src/cli/check.ts",
+    "levels:prove": "tsx packages/content-tools/src/cli/prove.ts",
+    "packs:build": "tsx packages/content-tools/src/cli/packs.ts",
+    "levels:gen": "tsx packages/content-tools/src/cli/gen.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
