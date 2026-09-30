@@ -32,7 +32,7 @@ function followHints(level: Level, graph: SolverGraph, from: State, limit = 200)
   throw new Error('hints did not reach a tuned state');
 }
 
-describe.skip('solve and explore: fixtures', () => {
+describe('solve and explore: fixtures', () => {
   it.each(FIXTURE_IDS)('%s: reachable, par and optimalSolutions', (id) => {
     const level = compileLevel(levelJson(id));
     const expected = SOLVER_EXPECTED[id];
@@ -116,7 +116,7 @@ describe.skip('solve and explore: fixtures', () => {
   });
 });
 
-describe.skip('hints and solution paths (FR-04, FR-06)', () => {
+describe('hints and solution paths (FR-04, FR-06)', () => {
   it.each(FIXTURE_IDS)('%s: solutionPath matches the reference exactly', (id) => {
     const level = compileLevel(levelJson(id));
     const graph = explore(level);
