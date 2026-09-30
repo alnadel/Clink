@@ -32,6 +32,8 @@ jobs:
         run: pnpm levels:check
       - name: Build
         run: pnpm build
+      - name: Size budget (NFR-02)
+        run: pnpm size
 
   e2e:
     runs-on: ubuntu-latest
