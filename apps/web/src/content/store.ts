@@ -1,4 +1,5 @@
 import { type ContentManifest, compileLevel, type Level, type LevelJson, type PackFile } from '@clink/rules';
+import { reportError } from '../ops/errors';
 
 export interface ContentStore {
   manifest(): ContentManifest;
