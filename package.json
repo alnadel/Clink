@@ -15,11 +15,12 @@
     "test:watch": "vitest",
     "dev": "pnpm --filter @clink/web dev",
     "build": "pnpm --filter @clink/web build",
-    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build",
+    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && node scripts/check-no-test-hook.mjs",
     "levels:check": "tsx packages/content-tools/src/cli/check.ts",
     "levels:prove": "tsx packages/content-tools/src/cli/prove.ts",
     "packs:build": "tsx packages/content-tools/src/cli/packs.ts",
-    "levels:gen": "tsx packages/content-tools/src/cli/gen.ts"
+    "levels:gen": "tsx packages/content-tools/src/cli/gen.ts",
+    "test:e2e": "pnpm --filter @clink/web exec playwright test"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",

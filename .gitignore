@@ -11,3 +11,5 @@ apps/web/public/config.json
 test-results/
 playwright-report/
 content/candidates/
+dist-e2e/
+playwright-report/
