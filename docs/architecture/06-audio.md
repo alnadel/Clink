@@ -17,7 +17,7 @@ audio/
 public/audio/
   glass/manifest.json, glass/*.mp3
   sfx/<name>.mp3
-  silence.mp3     0.5 s of silence (§5)
+  silence.wav     0.5 s of silence (§5)
 ```
 
 ## 2. Engine rules
@@ -97,7 +97,7 @@ if (session) {
   session.type = 'playback';              // Safari 16.4+: plays even with the ringer switch on silent
 } else if (isIOS()) {
   // Fallback: a looping silent <audio> element, started inside the gesture.
-  silentEl ??= Object.assign(document.createElement('audio'), { src: '/audio/silence.mp3', loop: true });
+  silentEl ??= Object.assign(document.createElement('audio'), { src: '/audio/silence.wav', loop: true });
   silentEl.setAttribute('playsinline', '');
   void silentEl.play().catch(() => {});
 }

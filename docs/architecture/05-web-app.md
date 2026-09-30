@@ -74,7 +74,8 @@ route. It has two buttons: "Play with sound" and "Play muted".
 - **Muted:** set `settings.sound = false` and `soundChoiceMade = true`. No AudioContext is ever
   created.
 - Then: if the route is `/d/:n`, continue the link flow (§10). Otherwise, if no campaign level
-  is solved, navigate to `/play/w1-01`.
+  is solved, navigate to `/play/<first level>`, where the first level is `nextLevel(...)`
+  (§9), i.e. the first non-disabled id in `manifest.levelOrder`.
 
 ## 3. Game session (`game/session.ts`): the exact behaviour
 

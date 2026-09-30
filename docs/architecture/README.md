@@ -102,3 +102,15 @@ pointerdown on canvas ──▶ Board.onGlassTap(i)
                                  found         ─▶ board.setFound + audio.sfx('found') if gained
                                  tuned         ─▶ lock, flourish, play-along (rule 12), solve card
 ```
+
+## Backlog
+
+The work is split into small GitHub issues, grouped by gate. Each epic lists its issues with
+their dependencies:
+
+- [#1 Gate 1 · Fun (Oct 14)](https://github.com/alnadel/Clink/issues/1): rules engine, content tools, playable prototype
+- [#2 Gate 2 · Alpha (Nov 4)](https://github.com/alnadel/Clink/issues/2): map, onboarding, analytics, PWA, World 1 content
+- [#3 Gate 3 · Launch ready (Nov 25)](https://github.com/alnadel/Clink/issues/3): daily, share, settings, config, accessibility, Worlds 2–3
+
+Issues labelled `ai-ready` are fully specified. Issues labelled `needs-human` need a decision,
+a device, content or a review first.
